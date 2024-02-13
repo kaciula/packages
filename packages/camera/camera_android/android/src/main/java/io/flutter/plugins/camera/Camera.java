@@ -401,6 +401,12 @@ class Camera
     // Create a new capture builder.
     previewRequestBuilder = cameraDevice.createCaptureRequest(templateType);
 
+    Integer stabilizationMode = previewRequestBuilder.get(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE);
+    Log.i(TAG, "Template " + templateType + "Stabilization mode before: " + stabilizationMode);
+    previewRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+    stabilizationMode = previewRequestBuilder.get(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE);
+    Log.i(TAG, "Template " + templateType + "Stabilization mode after: " + stabilizationMode);
+
     // Build Flutter surface to render to.
     ResolutionFeature resolutionFeature = cameraFeatures.getResolution();
     SurfaceTexture surfaceTexture = flutterTexture.surfaceTexture();
