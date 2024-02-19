@@ -401,11 +401,19 @@ class Camera
     // Create a new capture builder.
     previewRequestBuilder = cameraDevice.createCaptureRequest(templateType);
 
-    Integer stabilizationMode = previewRequestBuilder.get(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE);
-    Log.i(TAG, "Template " + templateType + "Stabilization mode before: " + stabilizationMode);
-    previewRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON);
-    stabilizationMode = previewRequestBuilder.get(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE);
-    Log.i(TAG, "Template " + templateType + "Stabilization mode after: " + stabilizationMode);
+    final int[] stabilizationModes = cameraProperties.getAvailableStabilizationModes();
+    Log.i(TAG, "Available stabilization modes: " + (stabilizationModes != null ? Arrays.toString(stabilizationModes) : "null"));
+
+    final int[] lensStabilizationModes = cameraProperties.getAvailableLensStabilizationModes();
+    Log.i(TAG, "Available lens stabilization modes: " + (lensStabilizationModes != null ? Arrays.toString(lensStabilizationModes) : "null"));
+
+    if (contains(lensStabilizationModes, CameraMetadata.LENS_OPTICAL_STABILIZATION_MODE_ON)) {
+        Log.i(TAG, "Enable lens stabilization mode");
+        previewRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, CameraMetadata.LENS_OPTICAL_STABILIZATION_MODE_ON);
+    } else if (contains(stabilizationModes, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON)) {
+        Log.i(TAG, "Enable stabilization mode");
+        previewRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+    }
 
     // Build Flutter surface to render to.
     ResolutionFeature resolutionFeature = cameraFeatures.getResolution();
@@ -479,7 +487,11 @@ class Camera
       for (Surface surface : remainingSurfaces) {
         configs.add(new OutputConfiguration(surface));
       }
-      createCaptureSessionWithSessionConfig(configs, callback);
+      final SessionConfiguration sessionConfiguration = new SessionConfiguration(
+              SessionConfiguration.SESSION_REGULAR, configs, Executors.newSingleThreadExecutor(),
+              callback);
+      sessionConfiguration.setSessionParameters(previewRequestBuilder.build());
+      cameraDevice.createCaptureSession(sessionConfiguration);
     } else {
       // Collect all surfaces to render to.
       List<Surface> surfaceList = new ArrayList<>();
@@ -489,23 +501,23 @@ class Camera
     }
   }
 
-  @TargetApi(VERSION_CODES.P)
-  private void createCaptureSessionWithSessionConfig(
-      List<OutputConfiguration> outputConfigs, CameraCaptureSession.StateCallback callback)
-      throws CameraAccessException {
-    cameraDevice.createCaptureSession(
-        new SessionConfiguration(
-            SessionConfiguration.SESSION_REGULAR,
-            outputConfigs,
-            Executors.newSingleThreadExecutor(),
-            callback));
-  }
-
   @SuppressWarnings("deprecation")
   private void createCaptureSession(
       List<Surface> surfaces, CameraCaptureSession.StateCallback callback)
       throws CameraAccessException {
     cameraDevice.createCaptureSession(surfaces, callback, backgroundHandler);
+  }
+
+  private boolean contains(int[] arr, int toCheckValue) {
+    if (arr == null) {
+      return false;
+    }
+    for (int element : arr) {
+      if (element == toCheckValue) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // Send a repeating request to refresh  capture session.
