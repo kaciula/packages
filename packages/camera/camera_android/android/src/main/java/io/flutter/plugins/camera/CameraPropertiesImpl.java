@@ -164,4 +164,16 @@ public class CameraPropertiesImpl implements CameraProperties {
     return cameraCharacteristics.get(
         CameraCharacteristics.NOISE_REDUCTION_AVAILABLE_NOISE_REDUCTION_MODES);
   }
+
+  @Override
+  public int[] getAvailableStabilizationModes() {
+    return cameraCharacteristics.get(
+        CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES);
+  }
+
+  @Override
+  public int[] getAvailableLensStabilizationModes() {
+    return cameraCharacteristics.get(
+        CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION);
+  }
 }
