@@ -71,11 +71,23 @@ class MethodChannelCamera extends CameraPlatform {
       }
 
       return cameras.map((Map<dynamic, dynamic> camera) {
+        final List<CameraStabilizationMode> availableStabilizationModes;
+        if (camera['availableStabilizationModes'] != null) {
+          availableStabilizationModes =
+              (camera['availableStabilizationModes']! as List<String>)
+                  .map<CameraStabilizationMode>(
+                      (String mode) => parseCameraStabilizationMode(mode))
+                  .toList();
+        } else {
+          availableStabilizationModes = <CameraStabilizationMode>[];
+        }
+
         return CameraDescription(
           name: camera['name']! as String,
           lensDirection:
               parseCameraLensDirection(camera['lensFacing']! as String),
           sensorOrientation: camera['sensorOrientation']! as int,
+          availableStabilizationModes: availableStabilizationModes,
         );
       }).toList();
     } on PlatformException catch (e) {

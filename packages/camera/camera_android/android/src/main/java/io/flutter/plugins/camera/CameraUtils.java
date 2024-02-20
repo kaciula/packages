@@ -127,8 +127,38 @@ public final class CameraUtils {
           details.put("lensFacing", "external");
           break;
       }
+
+      final List<String> availableStabilizationModes = new ArrayList<>();
+      availableStabilizationModes.add("off");
+
+      final int[] stabilizationModes = characteristics.get(
+              CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES);
+      if (contains(stabilizationModes, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON)) {
+          availableStabilizationModes.add("digital");
+      }
+
+      final int[] lensStabilizationModes = characteristics.get(
+              CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION);
+      if (contains(lensStabilizationModes, CameraMetadata.LENS_OPTICAL_STABILIZATION_MODE_ON)) {
+          availableStabilizationModes.add("optical");
+      }
+
+      details.put("availableStabilizationModes", availableStabilizationModes);
+
       cameras.add(details);
     }
     return cameras;
+  }
+
+  private static boolean contains(int[] arr, int toCheckValue) {
+    if (arr == null) {
+        return false;
+    }
+    for (int element : arr) {
+      if (element == toCheckValue) {
+          return true;
+      }
+    }
+    return false;
   }
 }

@@ -35,9 +35,11 @@ void main() {
         // Act
         final int cameraId = await camera.createCameraWithSettings(
           const CameraDescription(
-              name: 'Test',
-              lensDirection: CameraLensDirection.back,
-              sensorOrientation: 0),
+            name: 'Test',
+            lensDirection: CameraLensDirection.back,
+            sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
+          ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
             fps: 15,
@@ -84,6 +86,7 @@ void main() {
               name: 'Test',
               lensDirection: CameraLensDirection.back,
               sensorOrientation: 0,
+              availableStabilizationModes: <CameraStabilizationMode>[],
             ),
             const MediaSettings(
               resolutionPreset: ResolutionPreset.low,
@@ -124,6 +127,7 @@ void main() {
               name: 'Test',
               lensDirection: CameraLensDirection.back,
               sensorOrientation: 0,
+              availableStabilizationModes: <CameraStabilizationMode>[],
             ),
             const MediaSettings(
               resolutionPreset: ResolutionPreset.low,
@@ -192,6 +196,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -245,6 +250,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -299,6 +305,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -475,6 +482,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -535,6 +543,7 @@ void main() {
             lensDirection:
                 parseCameraLensDirection(typedData['lensFacing']! as String),
             sensorOrientation: typedData['sensorOrientation']! as int,
+            availableStabilizationModes: const <CameraStabilizationMode>[],
           );
           expect(cameras[i], cameraDescription);
         }
@@ -629,9 +638,11 @@ void main() {
 
         // Act
         const CameraDescription cameraDescription = CameraDescription(
-            name: 'Test',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 0);
+          name: 'Test',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        );
         await camera.setDescriptionWhileRecording(cameraDescription);
 
         // Assert
