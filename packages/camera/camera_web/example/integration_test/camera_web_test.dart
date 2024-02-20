@@ -319,11 +319,13 @@ void main() {
               name: firstVideoDevice.label!,
               lensDirection: CameraLensDirection.front,
               sensorOrientation: 0,
+              availableStabilizationModes: const <CameraStabilizationMode>[],
             ),
             CameraDescription(
               name: secondVideoDevice.label!,
               lensDirection: CameraLensDirection.back,
               sensorOrientation: 0,
+              availableStabilizationModes: const <CameraStabilizationMode>[],
             )
           ]),
         );
@@ -504,6 +506,7 @@ void main() {
           name: 'name',
           lensDirection: CameraLensDirection.front,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         );
 
         const CameraMetadata cameraMetadata = CameraMetadata(
@@ -608,6 +611,7 @@ void main() {
               name: 'name',
               lensDirection: CameraLensDirection.back,
               sensorOrientation: 0,
+              availableStabilizationModes: <CameraStabilizationMode>[],
             ),
             ResolutionPreset.ultraHigh,
           ),
