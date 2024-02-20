@@ -26,13 +26,13 @@ dependencies:
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_android
-      ref: a509028d5aca8fe763822f6efa71d284757fa26e
+      ref: 0587f2abf642999ba633cee878db1a44962d4d25
     # path: ../camera_android
   camera_avfoundation: # ^0.9.13
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_avfoundation
-      ref: a509028d5aca8fe763822f6efa71d284757fa26e
+      ref: 0587f2abf642999ba633cee878db1a44962d4d25
     # path: ../camera_avfoundation
   camera_platform_interface: # ^2.5.0
     git:
