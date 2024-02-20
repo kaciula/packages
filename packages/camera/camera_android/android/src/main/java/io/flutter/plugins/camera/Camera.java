@@ -401,16 +401,10 @@ class Camera
     // Create a new capture builder.
     previewRequestBuilder = cameraDevice.createCaptureRequest(templateType);
 
-    final int[] stabilizationModes = cameraProperties.getAvailableStabilizationModes();
-    Log.i(TAG, "Available stabilization modes: " + (stabilizationModes != null ? Arrays.toString(stabilizationModes) : "null"));
-
-    final int[] lensStabilizationModes = cameraProperties.getAvailableLensStabilizationModes();
-    Log.i(TAG, "Available lens stabilization modes: " + (lensStabilizationModes != null ? Arrays.toString(lensStabilizationModes) : "null"));
-
-    if (contains(lensStabilizationModes, CameraMetadata.LENS_OPTICAL_STABILIZATION_MODE_ON)) {
+    if (false) {
         Log.i(TAG, "Enable lens stabilization mode");
         previewRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, CameraMetadata.LENS_OPTICAL_STABILIZATION_MODE_ON);
-    } else if (contains(stabilizationModes, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON)) {
+    } else if (false) {
         Log.i(TAG, "Enable stabilization mode");
         previewRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON);
     }
@@ -506,18 +500,6 @@ class Camera
       List<Surface> surfaces, CameraCaptureSession.StateCallback callback)
       throws CameraAccessException {
     cameraDevice.createCaptureSession(surfaces, callback, backgroundHandler);
-  }
-
-  private boolean contains(int[] arr, int toCheckValue) {
-    if (arr == null) {
-      return false;
-    }
-    for (int element : arr) {
-      if (element == toCheckValue) {
-        return true;
-      }
-    }
-    return false;
   }
 
   // Send a repeating request to refresh  capture session.

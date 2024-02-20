@@ -273,8 +273,4 @@ public interface CameraProperties {
    */
   @NonNull
   int[] getAvailableNoiseReductionModes();
-
-  int[] getAvailableStabilizationModes();
-
-  int[] getAvailableLensStabilizationModes();
 }

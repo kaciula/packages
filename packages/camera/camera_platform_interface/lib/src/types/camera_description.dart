@@ -16,6 +16,18 @@ enum CameraLensDirection {
   external,
 }
 
+/// The mode of camera stabilization.
+enum CameraStabilizationMode {
+  /// No stabilization.
+  off,
+
+  /// Stabilization using digital video stabilization.
+  digital,
+
+  /// Stabilization using optical video stabilization (OIS).
+  optical
+}
+
 /// Properties of a camera device.
 @immutable
 class CameraDescription {
@@ -24,6 +36,7 @@ class CameraDescription {
     required this.name,
     required this.lensDirection,
     required this.sensorOrientation,
+    required this.availableStabilizationModes,
   });
 
   /// The name of the camera device.
@@ -40,6 +53,9 @@ class CameraDescription {
   /// On Android, also defines the direction of rolling shutter readout, which
   /// is from top to bottom in the sensor's coordinate system.
   final int sensorOrientation;
+
+  /// The available stabilization modes for the camera.
+  final List<CameraStabilizationMode> availableStabilizationModes;
 
   @override
   bool operator ==(Object other) =>

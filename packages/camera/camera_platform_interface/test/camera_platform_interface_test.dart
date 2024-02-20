@@ -162,6 +162,7 @@ void main() {
             name: 'back',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.low,
         ),
@@ -177,6 +178,7 @@ void main() {
         name: 'back',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 0,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       const MediaSettings mediaSettings = MediaSettings(
@@ -501,9 +503,11 @@ void main() {
   group('exports', () {
     test('CameraDescription is exported', () {
       const CameraDescription(
-          name: 'abc-123',
-          sensorOrientation: 1,
-          lensDirection: CameraLensDirection.external);
+        name: 'abc-123',
+        sensorOrientation: 1,
+        lensDirection: CameraLensDirection.external,
+        availableStabilizationModes: <CameraStabilizationMode>[],
+      );
     });
 
     test('CameraException is exported', () {
