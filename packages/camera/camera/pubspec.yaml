@@ -32,7 +32,7 @@ dependencies:
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_avfoundation
-      ref: 0587f2abf642999ba633cee878db1a44962d4d25
+      ref: 436746706d8f6b9377a82be8a510b5ecba2f40ce
     # path: ../camera_avfoundation
   camera_platform_interface: # ^2.5.0
     git:
