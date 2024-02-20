@@ -44,7 +44,7 @@ dependencies:
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_web
-      ref: a509028d5aca8fe763822f6efa71d284757fa26e
+      ref: 937d5a890dfd8670f7a19e12bccffc46bc9ab15c
     # path: ../camera_web
   flutter:
     sdk: flutter
