@@ -59,9 +59,11 @@ void main() {
       // Act
       final int cameraId = await camera.createCamera(
         const CameraDescription(
-            name: 'Test',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 0),
+          name: 'Test',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.high,
       );
 
@@ -97,6 +99,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.high,
         ),
@@ -128,6 +131,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.high,
         ),
@@ -190,6 +194,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -237,6 +242,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -285,6 +291,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -457,6 +464,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -514,6 +522,7 @@ void main() {
           lensDirection:
               parseCameraLensDirection(typedData['lensFacing']! as String),
           sensorOrientation: typedData['sensorOrientation']! as int,
+          availableStabilizationModes: const <CameraStabilizationMode>[],
         );
         expect(cameras[i], cameraDescription);
       }
@@ -706,9 +715,11 @@ void main() {
         methods: <String, dynamic>{'setDescriptionWhileRecording': null},
       );
       const CameraDescription camera2Description = CameraDescription(
-          name: 'Test2',
-          lensDirection: CameraLensDirection.front,
-          sensorOrientation: 0);
+        name: 'Test2',
+        lensDirection: CameraLensDirection.front,
+        sensorOrientation: 0,
+        availableStabilizationModes: <CameraStabilizationMode>[],
+      );
 
       // Act
       await camera.setDescriptionWhileRecording(camera2Description);

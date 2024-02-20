@@ -88,6 +88,10 @@ class CameraCaptureCallback extends CaptureCallback {
       this.captureProps.setLastLensAperture(lensAperture);
       this.captureProps.setLastSensorExposureTime(sensorExposureTime);
       this.captureProps.setLastSensorSensitivity(sensorSensitivity);
+
+      Integer digitalStabilizationMode = result.get(CaptureResult.CONTROL_VIDEO_STABILIZATION_MODE);
+      Integer lensStabilizationMode = result.get(CaptureResult.LENS_OPTICAL_STABILIZATION_MODE);
+      Log.i(TAG, "Total capture result for camera state: " + cameraState + " digital: " + digitalStabilizationMode + " optical: " + lensStabilizationMode);
     }
 
     if (cameraState != CameraState.STATE_PREVIEW) {

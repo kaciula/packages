@@ -4,7 +4,7 @@
 
 // ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 
-import 'resolution_preset.dart';
+import '../../camera_platform_interface.dart';
 
 /// Recording media settings.
 ///
@@ -13,13 +13,14 @@ import 'resolution_preset.dart';
 /// If [fps], [videoBitrate] or [audioBitrate] are passed, they must be greater than zero.
 class MediaSettings {
   /// Creates a [MediaSettings].
-  const MediaSettings({
-    this.resolutionPreset,
-    this.fps,
-    this.videoBitrate,
-    this.audioBitrate,
-    this.enableAudio = false,
-  })  : assert(fps == null || fps > 0, 'fps must be null or greater than zero'),
+  const MediaSettings(
+      {this.resolutionPreset,
+      this.fps,
+      this.videoBitrate,
+      this.audioBitrate,
+      this.enableAudio = false,
+      this.stabilizationMode = CameraStabilizationMode.off})
+      : assert(fps == null || fps > 0, 'fps must be null or greater than zero'),
         assert(videoBitrate == null || videoBitrate > 0,
             'videoBitrate must be null or greater than zero'),
         assert(audioBitrate == null || audioBitrate > 0,
@@ -39,6 +40,8 @@ class MediaSettings {
 
   /// Controls audio presence in recorded video.
   final bool enableAudio;
+
+  final CameraStabilizationMode stabilizationMode;
 
   @override
   bool operator ==(Object other) {

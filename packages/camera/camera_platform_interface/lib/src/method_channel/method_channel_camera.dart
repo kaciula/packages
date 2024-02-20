@@ -73,11 +73,11 @@ class MethodChannelCamera extends CameraPlatform {
       return cameras.map((Map<dynamic, dynamic> camera) {
         final List<CameraStabilizationMode> availableStabilizationModes;
         if (camera['availableStabilizationModes'] != null) {
-          availableStabilizationModes =
-              (camera['availableStabilizationModes']! as List<String>)
-                  .map<CameraStabilizationMode>(
-                      (String mode) => parseCameraStabilizationMode(mode))
-                  .toList();
+          availableStabilizationModes = List<String>.from(
+                  camera['availableStabilizationModes']! as List<dynamic>)
+              .map<CameraStabilizationMode>(
+                  (String mode) => parseCameraStabilizationMode(mode))
+              .toList();
         } else {
           availableStabilizationModes = <CameraStabilizationMode>[];
         }
@@ -100,11 +100,16 @@ class MethodChannelCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) async =>
       createCameraWithSettings(
-          cameraDescription,
-          MediaSettings(
-              resolutionPreset: resolutionPreset, enableAudio: enableAudio));
+        cameraDescription,
+        MediaSettings(
+          resolutionPreset: resolutionPreset,
+          enableAudio: enableAudio,
+          stabilizationMode: stabilizationMode,
+        ),
+      );
 
   @override
   Future<int> createCameraWithSettings(
@@ -123,6 +128,8 @@ class MethodChannelCamera extends CameraPlatform {
         'videoBitrate': mediaSettings.videoBitrate,
         'audioBitrate': mediaSettings.audioBitrate,
         'enableAudio': mediaSettings.enableAudio,
+        'stabilizationMode':
+            _serializeStabilizationMode(mediaSettings.stabilizationMode),
       });
 
       return reply!['cameraId']! as int;
@@ -586,6 +593,19 @@ class MethodChannelCamera extends CameraPlatform {
         return 'medium';
       case ResolutionPreset.low:
         return 'low';
+    }
+  }
+
+  /// Returns the stabilization mode as a String.
+  String _serializeStabilizationMode(
+      CameraStabilizationMode stabilizationMode) {
+    switch (stabilizationMode) {
+      case CameraStabilizationMode.off:
+        return 'off';
+      case CameraStabilizationMode.digital:
+        return 'digital';
+      case CameraStabilizationMode.optical:
+        return 'optical';
     }
   }
 

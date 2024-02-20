@@ -113,6 +113,7 @@ class Camera
   private final SurfaceTextureEntry flutterTexture;
   private final ResolutionPreset resolutionPreset;
   private final boolean enableAudio;
+  private final String stabilizationMode;
   private final Context applicationContext;
   final DartMessenger dartMessenger;
   private CameraProperties cameraProperties;
@@ -192,13 +193,15 @@ class Camera
       final DartMessenger dartMessenger,
       final CameraProperties cameraProperties,
       final ResolutionPreset resolutionPreset,
-      final boolean enableAudio) {
+      final boolean enableAudio,
+      final String stabilizationMode) {
 
     if (activity == null) {
       throw new IllegalStateException("No activity available!");
     }
     this.activity = activity;
     this.enableAudio = enableAudio;
+    this.stabilizationMode = stabilizationMode;
     this.flutterTexture = flutterTexture;
     this.dartMessenger = dartMessenger;
     this.applicationContext = activity.getApplicationContext();
@@ -401,12 +404,14 @@ class Camera
     // Create a new capture builder.
     previewRequestBuilder = cameraDevice.createCaptureRequest(templateType);
 
-    if (false) {
-        Log.i(TAG, "Enable lens stabilization mode");
+    if (stabilizationMode.equals("optical")) {
+        Log.i(TAG, "Enable optical stabilization mode");
         previewRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, CameraMetadata.LENS_OPTICAL_STABILIZATION_MODE_ON);
-    } else if (false) {
-        Log.i(TAG, "Enable stabilization mode");
+    } else if (stabilizationMode.equals("digital")) {
+        Log.i(TAG, "Enable digital stabilization mode");
         previewRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+    } else {
+        Log.i(TAG, "Ignore stabilization mode");
     }
 
     // Build Flutter surface to render to.
