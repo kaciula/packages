@@ -237,6 +237,7 @@ class CameraController extends ValueNotifier<CameraValue> {
     this.resolutionPreset, {
     this.enableAudio = true,
     this.imageFormatGroup,
+    this.stabilizationMode = CameraStabilizationMode.off,
   }) : super(CameraValue.uninitialized(description));
 
   /// The properties of the camera device controlled by this controller.
@@ -257,6 +258,9 @@ class CameraController extends ValueNotifier<CameraValue> {
   ///
   /// When null the imageFormat will fallback to the platforms default.
   final ImageFormatGroup? imageFormatGroup;
+
+  /// The camera stabilization mode.
+  final CameraStabilizationMode stabilizationMode;
 
   /// The id of a camera that hasn't been initialized.
   @visibleForTesting
@@ -317,6 +321,7 @@ class CameraController extends ValueNotifier<CameraValue> {
         description,
         resolutionPreset,
         enableAudio: enableAudio,
+        stabilizationMode: stabilizationMode,
       );
 
       _unawaited(CameraPlatform.instance

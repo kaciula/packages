@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:camera/camera.dart';
+import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,11 @@ class FakeController extends ValueNotifier<CameraValue>
   FakeController() : super(const CameraValue.uninitialized(fakeDescription));
 
   static const CameraDescription fakeDescription = CameraDescription(
-      name: '', lensDirection: CameraLensDirection.back, sensorOrientation: 0);
+    name: '',
+    lensDirection: CameraLensDirection.back,
+    sensorOrientation: 0,
+    availableStabilizationModes: <CameraStabilizationMode>[],
+  );
 
   @override
   Future<void> dispose() async {
@@ -34,6 +39,9 @@ class FakeController extends ValueNotifier<CameraValue>
 
   @override
   bool get enableAudio => false;
+
+  @override
+  CameraStabilizationMode get stabilizationMode => CameraStabilizationMode.off;
 
   @override
   Future<double> getExposureOffsetStepSize() async => 1.0;

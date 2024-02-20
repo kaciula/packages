@@ -22,9 +22,11 @@ void main() {
   test('startImageStream() throws $CameraException when uninitialized', () {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
 
     expect(
@@ -49,9 +51,11 @@ void main() {
       () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
 
     await cameraController.initialize();
@@ -72,9 +76,11 @@ void main() {
       () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
     await cameraController.initialize();
 
@@ -92,9 +98,11 @@ void main() {
   test('startImageStream() calls CameraPlatform', () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
     await cameraController.initialize();
 
@@ -107,9 +115,11 @@ void main() {
   test('stopImageStream() throws $CameraException when uninitialized', () {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
 
     expect(
@@ -134,9 +144,11 @@ void main() {
       () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
     await cameraController.initialize();
 
@@ -152,9 +164,11 @@ void main() {
   test('stopImageStream() intended behaviour', () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
     await cameraController.initialize();
     await cameraController.startImageStream((CameraImage image) {});
@@ -167,9 +181,11 @@ void main() {
   test('startVideoRecording() can stream images', () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
 
     await cameraController.initialize();
@@ -185,9 +201,11 @@ void main() {
   test('startVideoRecording() by default does not stream', () async {
     final CameraController cameraController = CameraController(
         const CameraDescription(
-            name: 'cam',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 90),
+          name: 'cam',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.max);
 
     await cameraController.initialize();

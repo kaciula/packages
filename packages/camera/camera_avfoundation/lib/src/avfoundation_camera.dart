@@ -79,11 +79,23 @@ class AVFoundationCamera extends CameraPlatform {
       }
 
       return cameras.map((Map<dynamic, dynamic> camera) {
+        final List<CameraStabilizationMode> availableStabilizationModes;
+        if (camera['availableStabilizationModes'] != null) {
+          availableStabilizationModes = List<String>.from(
+                  camera['availableStabilizationModes']! as List<dynamic>)
+              .map<CameraStabilizationMode>(
+                  (String mode) => parseCameraStabilizationMode(mode))
+              .toList();
+        } else {
+          availableStabilizationModes = <CameraStabilizationMode>[];
+        }
+
         return CameraDescription(
           name: camera['name']! as String,
           lensDirection:
               parseCameraLensDirection(camera['lensFacing']! as String),
           sensorOrientation: camera['sensorOrientation']! as int,
+          availableStabilizationModes: availableStabilizationModes,
         );
       }).toList();
     } on PlatformException catch (e) {
@@ -96,6 +108,7 @@ class AVFoundationCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) async {
     try {
       final Map<String, dynamic>? reply = await _channel
@@ -105,6 +118,7 @@ class AVFoundationCamera extends CameraPlatform {
             ? _serializeResolutionPreset(resolutionPreset)
             : null,
         'enableAudio': enableAudio,
+        'stabilizationMode': _serializeStabilizationMode(stabilizationMode),
       });
 
       return reply!['cameraId']! as int;
@@ -582,6 +596,19 @@ class AVFoundationCamera extends CameraPlatform {
     // switch as needing an update.
     // ignore: dead_code
     return 'max';
+  }
+
+  /// Returns the stabilization mode as a String.
+  String _serializeStabilizationMode(
+      CameraStabilizationMode stabilizationMode) {
+    switch (stabilizationMode) {
+      case CameraStabilizationMode.off:
+        return 'off';
+      case CameraStabilizationMode.digital:
+        return 'digital';
+      case CameraStabilizationMode.optical:
+        return 'optical';
+    }
   }
 
   /// Converts messages received from the native platform into device events.

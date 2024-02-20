@@ -568,7 +568,9 @@ class OverriddenCameraPlatform extends CameraPlatform {
   @override
   Future<int> createCamera(
       CameraDescription cameraDescription, ResolutionPreset? resolutionPreset,
-      {bool enableAudio = false}) {
+      {bool enableAudio = false,
+      CameraStabilizationMode stabilizationMode =
+          CameraStabilizationMode.off}) {
     _onCreateCameraCalled(cameraDescription, resolutionPreset, enableAudio);
     return Future<int>.value(0);
   }
