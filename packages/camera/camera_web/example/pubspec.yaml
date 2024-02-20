@@ -6,7 +6,11 @@ environment:
   flutter: ">=3.10.0"
 
 dependencies:
-  camera_platform_interface: ^2.1.0
+  camera_platform_interface: # ^2.1.0
+    git:
+      url: https://github.com/kaciula/packages.git
+      path: packages/camera/camera_platform_interface
+      ref: 61e1800adc5f6295e36fd5e1618c007fb7259390
   camera_web:
     path: ../
   flutter:

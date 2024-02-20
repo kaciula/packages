@@ -160,6 +160,7 @@ class CameraPlugin extends CameraPlatform {
             name: cameraLabel,
             lensDirection: lensDirection,
             sensorOrientation: 0,
+            availableStabilizationModes: const <CameraStabilizationMode>[],
           );
 
           final CameraMetadata cameraMetadata = CameraMetadata(
@@ -197,6 +198,7 @@ class CameraPlugin extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) async {
     try {
       if (!camerasMetadata.containsKey(cameraDescription)) {

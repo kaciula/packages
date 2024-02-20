@@ -27,7 +27,11 @@ dependencies:
   camera_avfoundation: # ^0.9.13
     path: ../camera_avfoundation
   camera_platform_interface: # ^2.5.0
-    path: ../camera_platform_interface
+    git:
+      url: https://github.com/kaciula/packages.git
+      path: packages/camera/camera_platform_interface
+      ref: 61e1800adc5f6295e36fd5e1618c007fb7259390
+    # path: ../camera_platform_interface
   camera_web: # ^0.3.1
     path: ../camera_web
   flutter:
