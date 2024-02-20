@@ -26,22 +26,26 @@ dependencies:
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_android
-      ref: fedcd5fccfcda20eeeeaf10dcd6a3f4e66ee2ff0
+      ref: a509028d5aca8fe763822f6efa71d284757fa26e
     # path: ../camera_android
   camera_avfoundation: # ^0.9.13
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_avfoundation
-      ref: fedcd5fccfcda20eeeeaf10dcd6a3f4e66ee2ff0
+      ref: a509028d5aca8fe763822f6efa71d284757fa26e
     # path: ../camera_avfoundation
   camera_platform_interface: # ^2.5.0
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_platform_interface
-      ref: fedcd5fccfcda20eeeeaf10dcd6a3f4e66ee2ff0
+      ref: a509028d5aca8fe763822f6efa71d284757fa26e
     # path: ../camera_platform_interface
   camera_web: # ^0.3.1
-    path: ../camera_web
+    git:
+      url: https://github.com/kaciula/packages.git
+      path: packages/camera/camera_web
+      ref: a509028d5aca8fe763822f6efa71d284757fa26e
+    # path: ../camera_web
   flutter:
     sdk: flutter
   flutter_plugin_android_lifecycle: ^2.0.2
