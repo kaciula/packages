@@ -56,6 +56,7 @@ typedef AVCaptureDevice * (^CaptureDeviceFactory)(void);
 /// Allows for injecting dependencies that are usually internal.
 - (instancetype)initWithCameraName:(NSString *)cameraName
                   resolutionPreset:(NSString *)resolutionPreset
+                  stabilizationMode:(NSString *)stabilizationMode
                        enableAudio:(BOOL)enableAudio
                        orientation:(UIDeviceOrientation)orientation
                videoCaptureSession:(AVCaptureSession *)videoCaptureSession

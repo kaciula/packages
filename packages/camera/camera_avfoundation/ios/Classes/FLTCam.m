@@ -42,6 +42,7 @@
 
 @property(readonly, nonatomic) int64_t textureId;
 @property BOOL enableAudio;
+@property NSString *stabilizationMode;
 @property(nonatomic) FLTImageStreamHandler *imageStreamHandler;
 @property(readonly, nonatomic) AVCaptureSession *videoCaptureSession;
 @property(readonly, nonatomic) AVCaptureSession *audioCaptureSession;
@@ -99,12 +100,14 @@ NSString *const errorMethod = @"error";
 
 - (instancetype)initWithCameraName:(NSString *)cameraName
                   resolutionPreset:(NSString *)resolutionPreset
+                  stabilizationMode:(NSString *)stabilizationMode
                        enableAudio:(BOOL)enableAudio
                        orientation:(UIDeviceOrientation)orientation
                captureSessionQueue:(dispatch_queue_t)captureSessionQueue
                              error:(NSError **)error {
   return [self initWithCameraName:cameraName
                  resolutionPreset:resolutionPreset
+                 stabilizationMode:stabilizationMode
                       enableAudio:enableAudio
                       orientation:orientation
               videoCaptureSession:[[AVCaptureSession alloc] init]
@@ -115,6 +118,7 @@ NSString *const errorMethod = @"error";
 
 - (instancetype)initWithCameraName:(NSString *)cameraName
                   resolutionPreset:(NSString *)resolutionPreset
+                  stabilizationMode:(NSString *)stabilizationMode
                        enableAudio:(BOOL)enableAudio
                        orientation:(UIDeviceOrientation)orientation
                videoCaptureSession:(AVCaptureSession *)videoCaptureSession
@@ -159,6 +163,7 @@ NSString *const errorMethod = @"error";
     return nil;
   }
   _enableAudio = enableAudio;
+  _stabilizationMode = stabilizationMode;
   _captureSessionQueue = captureSessionQueue;
   _pixelBufferSynchronizationQueue =
       dispatch_queue_create("io.flutter.camera.pixelBufferSynchronizationQueue", NULL);
@@ -229,6 +234,30 @@ NSString *const errorMethod = @"error";
                                              output:_captureVideoOutput];
   if ([_captureDevice position] == AVCaptureDevicePositionFront) {
     connection.videoMirrored = YES;
+  }
+
+  if (connection.isVideoStabilizationSupported) {
+    NSLog(@"Setting stabilization mode string '%@'", _stabilizationMode);
+
+    if ([_stabilizationMode isEqualToString:@"standard"]) {
+      NSLog(@"Setting stabilization mode standard");
+      connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeStandard;
+    } else if ([_stabilizationMode isEqualToString:@"cinematic"]) {
+      NSLog(@"Setting stabilization mode cinematic");
+      connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeCinematic;
+    } else if ([_stabilizationMode isEqualToString:@"cinematicExtended"]) {
+      NSLog(@"Setting stabilization mode cinematic extended");
+      connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeCinematicExtended;
+    } else if ([_stabilizationMode isEqualToString:@"previewOptimized"]) {
+      NSLog(@"Setting stabilization mode preview optimized");
+      connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModePreviewOptimized;
+    } else if ([_stabilizationMode isEqualToString:@"auto"]) {
+      NSLog(@"Setting stabilization mode auto");
+      connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
+    } else if ([_stabilizationMode isEqualToString:@"off"]) {
+      NSLog(@"Setting stabilization mode off");
+      connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeOff;
+    }
   }
 
   return connection;

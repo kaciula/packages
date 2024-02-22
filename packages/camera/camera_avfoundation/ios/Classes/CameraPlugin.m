@@ -130,10 +130,19 @@
           lensFacing = @"external";
           break;
       }
+
+      NSArray *availableStabilizationModes;
+      if (@available(iOS 17.0, *)) {
+        availableStabilizationModes = @[@"off", @"standard", @"cinematic", @"cinematicExtended", @"previewOptimized", @"auto"];
+      } else {
+        availableStabilizationModes = @[@"off", @"standard", @"cinematic", @"cinematicExtended", @"auto"];
+      }
+
       [reply addObject:@{
         @"name" : [device uniqueID],
         @"lensFacing" : lensFacing,
         @"sensorOrientation" : @90,
+        @"availableStabilizationModes": availableStabilizationModes,
       }];
     }
     [result sendSuccessWithData:reply];
@@ -308,10 +317,12 @@
 
     NSString *cameraName = createMethodCall.arguments[@"cameraName"];
     NSString *resolutionPreset = createMethodCall.arguments[@"resolutionPreset"];
+    NSString *stabilizationMode = createMethodCall.arguments[@"stabilizationMode"];
     NSNumber *enableAudio = createMethodCall.arguments[@"enableAudio"];
     NSError *error;
     FLTCam *cam = [[FLTCam alloc] initWithCameraName:cameraName
                                     resolutionPreset:resolutionPreset
+                                    stabilizationMode:stabilizationMode
                                          enableAudio:[enableAudio boolValue]
                                          orientation:[[UIDevice currentDevice] orientation]
                                  captureSessionQueue:strongSelf.captureSessionQueue
