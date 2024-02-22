@@ -41,6 +41,7 @@ class MediaSettings {
   /// Controls audio presence in recorded video.
   final bool enableAudio;
 
+  /// Video stabilization mode
   final CameraStabilizationMode stabilizationMode;
 
   @override
