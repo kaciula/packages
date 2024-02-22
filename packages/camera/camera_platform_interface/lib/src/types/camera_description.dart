@@ -22,10 +22,25 @@ enum CameraStabilizationMode {
   off,
 
   /// Stabilization using digital video stabilization.
-  digital,
+  digital, // Android only
 
   /// Stabilization using optical video stabilization (OIS).
-  optical
+  optical, // Android only
+
+  /// A mode that uses the standard algorithm.
+  standard, // iOS only
+
+  /// A mode that uses the cinematic stabilization algorithm.
+  cinematic, // iOS only
+
+  /// A mode that uses the extended cinematic stabilization algorithm.
+  cinematicExtended, // iOS only
+
+  /// A mode that uses the preview optimized stabilization algorithm.
+  previewOptimized, // iOS only
+
+  /// A mode that indicates the system chooses the most appropriate video stabilization mode for the device and format.
+  auto, // iOS only
 }
 
 /// Properties of a camera device.
