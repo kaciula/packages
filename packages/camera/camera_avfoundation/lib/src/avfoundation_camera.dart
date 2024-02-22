@@ -84,7 +84,7 @@ class AVFoundationCamera extends CameraPlatform {
           availableStabilizationModes = List<String>.from(
                   camera['availableStabilizationModes']! as List<dynamic>)
               .map<CameraStabilizationMode>(
-                  (String mode) => parseCameraStabilizationMode(mode))
+                  (String mode) => parseStabilizationMode(mode))
               .toList();
         } else {
           availableStabilizationModes = <CameraStabilizationMode>[];
@@ -608,6 +608,16 @@ class AVFoundationCamera extends CameraPlatform {
         return 'digital';
       case CameraStabilizationMode.optical:
         return 'optical';
+      case CameraStabilizationMode.standard:
+        return 'standard';
+      case CameraStabilizationMode.cinematic:
+        return 'cinematic';
+      case CameraStabilizationMode.cinematicExtended:
+        return 'cinematicExtended';
+      case CameraStabilizationMode.previewOptimized:
+        return 'previewOptimized';
+      case CameraStabilizationMode.auto:
+        return 'auto';
     }
   }
 
