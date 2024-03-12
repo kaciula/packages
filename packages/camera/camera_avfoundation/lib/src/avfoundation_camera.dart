@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+import 'avfoundation_camera_description.dart';
 import 'type_conversion.dart';
 import 'utils.dart';
 
@@ -69,13 +70,20 @@ class AVFoundationCamera extends CameraPlatform {
           .where((CameraEvent event) => event.cameraId == cameraId);
 
   @override
-  Future<List<CameraDescription>> availableCameras() async {
+  Future<List<AVCameraDescription>> availableCameras({
+    bool physicalCameras = true,
+    bool logicalCameras = false,
+  }) async {
     try {
       final List<Map<dynamic, dynamic>>? cameras = await _channel
-          .invokeListMethod<Map<dynamic, dynamic>>('availableCameras');
+          .invokeListMethod<Map<dynamic, dynamic>>(
+              'availableCameras', <String, dynamic>{
+        'physicalCameras': physicalCameras,
+        'logicalCameras': logicalCameras,
+      });
 
       if (cameras == null) {
-        return <CameraDescription>[];
+        return <AVCameraDescription>[];
       }
 
       return cameras.map((Map<dynamic, dynamic> camera) {
@@ -90,12 +98,14 @@ class AVFoundationCamera extends CameraPlatform {
           availableStabilizationModes = <CameraStabilizationMode>[];
         }
 
-        return CameraDescription(
+        return AVCameraDescription(
           name: camera['name']! as String,
           lensDirection:
               parseCameraLensDirection(camera['lensFacing']! as String),
           sensorOrientation: camera['sensorOrientation']! as int,
           availableStabilizationModes: availableStabilizationModes,
+          captureDeviceType:
+              parseAVCaptureDeviceType(camera['deviceType']! as String),
         );
       }).toList();
     } on PlatformException catch (e) {
