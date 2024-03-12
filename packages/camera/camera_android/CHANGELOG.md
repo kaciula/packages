@@ -2,6 +2,7 @@
 
 * Updates minimum supported SDK version to Flutter 3.13/Dart 3.1.
 * Updates compileSdk version to 34.
+* Add placeholder physicalCameras and logicalCameras options to availableDevices method.
 
 ## 0.10.8+16
 
