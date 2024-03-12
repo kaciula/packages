@@ -24,7 +24,7 @@ dependencies:
     git:
       url: https://github.com/kaciula/packages.git
       path: packages/camera/camera_platform_interface
-      ref: d285c381e8f7c2911af93ad337ac300f47a40efe
+      ref: f5974d5e5ee53b797db2759c975121b053f7a9e4
     # path: ../camera_platform_interface
   flutter:
     sdk: flutter
