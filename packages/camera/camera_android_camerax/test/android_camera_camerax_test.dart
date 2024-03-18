@@ -182,6 +182,7 @@ void main() {
             ? CameraLensDirection.front
             : CameraLensDirection.back,
         sensorOrientation: typedData['sensorOrientation']! as int,
+        availableStabilizationModes: const <CameraStabilizationMode>[],
       );
       expect(cameraDescriptions[i], cameraDescription);
     }
@@ -194,9 +195,11 @@ void main() {
     const CameraLensDirection testLensDirection = CameraLensDirection.back;
     const int testSensorOrientation = 90;
     const CameraDescription testCameraDescription = CameraDescription(
-        name: 'cameraName',
-        lensDirection: testLensDirection,
-        sensorOrientation: testSensorOrientation);
+      name: 'cameraName',
+      lensDirection: testLensDirection,
+      sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
     const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
     const bool enableAudio = true;
     const int testSurfaceTextureId = 6;
@@ -313,9 +316,11 @@ void main() {
     const CameraLensDirection testLensDirection = CameraLensDirection.back;
     const int testSensorOrientation = 90;
     const CameraDescription testCameraDescription = CameraDescription(
-        name: 'cameraName',
-        lensDirection: testLensDirection,
-        sensorOrientation: testSensorOrientation);
+      name: 'cameraName',
+      lensDirection: testLensDirection,
+      sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
     const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
     const bool enableAudio = true;
 
@@ -401,9 +406,11 @@ void main() {
     const CameraLensDirection testLensDirection = CameraLensDirection.back;
     const int testSensorOrientation = 90;
     const CameraDescription testCameraDescription = CameraDescription(
-        name: 'cameraName',
-        lensDirection: testLensDirection,
-        sensorOrientation: testSensorOrientation);
+      name: 'cameraName',
+      lensDirection: testLensDirection,
+      sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
     const bool enableAudio = true;
     final MockCamera mockCamera = MockCamera();
 
@@ -548,9 +555,11 @@ void main() {
     const CameraLensDirection testLensDirection = CameraLensDirection.back;
     const int testSensorOrientation = 90;
     const CameraDescription testCameraDescription = CameraDescription(
-        name: 'cameraName',
-        lensDirection: testLensDirection,
-        sensorOrientation: testSensorOrientation);
+      name: 'cameraName',
+      lensDirection: testLensDirection,
+      sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
     const bool enableAudio = true;
     final MockCamera mockCamera = MockCamera();
 
@@ -674,9 +683,11 @@ void main() {
     const CameraLensDirection testLensDirection = CameraLensDirection.back;
     const int testSensorOrientation = 90;
     const CameraDescription testCameraDescription = CameraDescription(
-        name: 'cameraName',
-        lensDirection: testLensDirection,
-        sensorOrientation: testSensorOrientation);
+      name: 'cameraName',
+      lensDirection: testLensDirection,
+      sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
     const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
     const bool enableAudio = true;
     const int resolutionWidth = 350;

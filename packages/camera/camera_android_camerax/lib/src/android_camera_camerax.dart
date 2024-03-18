@@ -182,7 +182,10 @@ class AndroidCameraCameraX extends CameraPlatform {
 
   /// Returns list of all available cameras and their descriptions.
   @override
-  Future<List<CameraDescription>> availableCameras() async {
+  Future<List<CameraDescription>> availableCameras({
+    bool physicalCameras = true,
+    bool logicalCameras = false,
+  }) async {
     final List<CameraDescription> cameraDescriptions = <CameraDescription>[];
 
     processCameraProvider ??= await proxy.getProcessCameraProvider();
@@ -216,10 +219,13 @@ class AndroidCameraCameraX extends CameraPlatform {
       cameraName = 'Camera $cameraCount';
       cameraCount++;
 
+      // TODO(kaciula): There is currently no way to get stabilization modes from CameraX
       cameraDescriptions.add(CameraDescription(
-          name: cameraName,
-          lensDirection: cameraLensDirection,
-          sensorOrientation: cameraSensorOrientation));
+        name: cameraName,
+        lensDirection: cameraLensDirection,
+        sensorOrientation: cameraSensorOrientation,
+        availableStabilizationModes: const <CameraStabilizationMode>[],
+      ));
     }
 
     return cameraDescriptions;
@@ -246,6 +252,8 @@ class AndroidCameraCameraX extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    // TODO(kaciula): There is currently no way to set the stabilization mode in CameraX
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) async {
     // Must obtain proper permissions before attempting to access a camera.
     await proxy.requestCameraPermissions(enableAudio);
