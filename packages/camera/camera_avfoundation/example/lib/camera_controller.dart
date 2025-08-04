@@ -176,10 +176,12 @@ class CameraController extends ValueNotifier<CameraValue> {
     ResolutionPreset resolutionPreset, {
     bool enableAudio = true,
     ImageFormatGroup? imageFormatGroup,
+    CameraStabilizationMode? stabilizationMode,
   }) => CameraController.withSettings(
     cameraDescription,
     mediaSettings: MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
     imageFormatGroup: imageFormatGroup,
+    stabilizationMode: stabilizationMode,
   );
 
   /// Creates a new camera controller in an uninitialized state, using specified media settings like FPS and bitrate.
@@ -187,6 +189,7 @@ class CameraController extends ValueNotifier<CameraValue> {
     CameraDescription cameraDescription, {
     required this.mediaSettings,
     this.imageFormatGroup,
+    this.stabilizationMode,
   }) : assert(
          mediaSettings.resolutionPreset != null,
          'resolutionPreset should be provided in CameraController.withSettings',
@@ -203,6 +206,9 @@ class CameraController extends ValueNotifier<CameraValue> {
   ///
   /// When null the imageFormat will fallback to the platforms default.
   final ImageFormatGroup? imageFormatGroup;
+
+  ///
+  final CameraStabilizationMode? stabilizationMode;
 
   late int _cameraId;
 
@@ -226,7 +232,11 @@ class CameraController extends ValueNotifier<CameraValue> {
       value = value.copyWith(deviceOrientation: event.orientation);
     });
 
-    _cameraId = await CameraPlatform.instance.createCameraWithSettings(description, mediaSettings);
+    _cameraId = await CameraPlatform.instance.createCameraWithSettings(
+      description,
+      mediaSettings,
+      stabilizationMode ?? CameraStabilizationMode.off,
+    );
 
     unawaited(
       CameraPlatform.instance.onCameraInitialized(_cameraId).first.then((

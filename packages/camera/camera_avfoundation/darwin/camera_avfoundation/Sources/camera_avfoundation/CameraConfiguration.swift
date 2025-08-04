@@ -37,6 +37,7 @@ class CameraConfiguration {
   var deviceOrientationProvider: DeviceOrientationProvider
   let initialCameraName: String
   var orientation: UIDeviceOrientation
+  let videoStabilizationMode: AVCaptureVideoStabilizationMode
 
   init(
     mediaSettings: PlatformMediaSettings,
@@ -46,7 +47,8 @@ class CameraConfiguration {
     captureSessionFactory: @escaping CaptureSessionFactory,
     captureSessionQueue: DispatchQueue,
     captureDeviceInputFactory: CaptureDeviceInputFactory,
-    initialCameraName: String
+    initialCameraName: String,
+    videoStabilizationMode: AVCaptureVideoStabilizationMode = .off
   ) {
     self.mediaSettings = mediaSettings
     self.mediaSettingsWrapper = mediaSettingsWrapper
@@ -57,6 +59,7 @@ class CameraConfiguration {
     self.audioCaptureSession = captureSessionFactory()
     self.captureDeviceInputFactory = captureDeviceInputFactory
     self.initialCameraName = initialCameraName
+    self.videoStabilizationMode = videoStabilizationMode
     self.orientation = UIDevice.current.orientation
     self.deviceOrientationProvider = DefaultDeviceOrientationProvider()
 

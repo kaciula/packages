@@ -124,6 +124,7 @@ void main() {
             name: 'back',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.low,
         ),
@@ -139,6 +140,7 @@ void main() {
           name: 'back',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         );
 
         const mediaSettings = MediaSettings(
@@ -168,7 +170,11 @@ void main() {
         });
 
         // Act & Assert
-        cameraPlatform.createCameraWithSettings(cameraDescription, mediaSettings);
+        cameraPlatform.createCameraWithSettings(
+          cameraDescription,
+          mediaSettings,
+          CameraStabilizationMode.off,
+        );
 
         expect(
           createCameraCalled,
@@ -408,6 +414,7 @@ void main() {
         name: 'abc-123',
         sensorOrientation: 1,
         lensDirection: CameraLensDirection.external,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
     });
 
@@ -472,6 +479,7 @@ class OverriddenCameraPlatform extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) {
     _onCreateCameraCalled(cameraDescription, resolutionPreset, enableAudio);
     return Future<int>.value(0);

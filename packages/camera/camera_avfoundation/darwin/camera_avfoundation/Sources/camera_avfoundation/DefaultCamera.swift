@@ -127,6 +127,10 @@ final class DefaultCamera: NSObject, Camera {
   private var focusMode = PlatformFocusMode.auto
   private var flashMode: PlatformFlashMode
 
+  /// The video stabilization mode requested when the camera was created, applied
+  /// to every video connection this camera creates.
+  private let initialVideoStabilizationMode: AVCaptureVideoStabilizationMode
+
   private static func pigeonErrorFromNSError(_ error: NSError) -> PigeonError {
     return PigeonError(
       code: "Error \(error.code)",
@@ -137,7 +141,8 @@ final class DefaultCamera: NSObject, Camera {
   private static func createConnection(
     captureDevice: CaptureDevice,
     videoFormat: FourCharCode,
-    captureDeviceInputFactory: CaptureDeviceInputFactory
+    captureDeviceInputFactory: CaptureDeviceInputFactory,
+    videoStabilizationMode: AVCaptureVideoStabilizationMode = .off
   ) throws -> (CaptureInput, CaptureVideoDataOutput, AVCaptureConnection) {
     // Setup video capture input.
     let captureVideoInput = try captureDeviceInputFactory.deviceInput(with: captureDevice)
@@ -156,6 +161,10 @@ final class DefaultCamera: NSObject, Camera {
 
     if captureDevice.position == .front {
       connection.isVideoMirrored = true
+    }
+
+    if connection.isVideoStabilizationSupported {
+      connection.preferredVideoStabilizationMode = videoStabilizationMode
     }
 
     return (captureVideoInput, captureVideoOutput, connection)
@@ -186,11 +195,14 @@ final class DefaultCamera: NSObject, Camera {
 
     deviceOrientation = configuration.orientation
 
+    initialVideoStabilizationMode = configuration.videoStabilizationMode
+
     let connection: AVCaptureConnection
     (captureVideoInput, captureVideoOutput, connection) = try DefaultCamera.createConnection(
       captureDevice: captureDevice,
       videoFormat: videoFormat,
-      captureDeviceInputFactory: configuration.captureDeviceInputFactory)
+      captureDeviceInputFactory: configuration.captureDeviceInputFactory,
+      videoStabilizationMode: configuration.videoStabilizationMode)
 
     super.init()
 
@@ -1158,7 +1170,8 @@ final class DefaultCamera: NSObject, Camera {
       (captureVideoInput, captureVideoOutput, newConnection) = try DefaultCamera.createConnection(
         captureDevice: captureDevice,
         videoFormat: videoFormat,
-        captureDeviceInputFactory: captureDeviceInputFactory)
+        captureDeviceInputFactory: captureDeviceInputFactory,
+        videoStabilizationMode: initialVideoStabilizationMode)
 
       captureVideoOutput.setSampleBufferDelegate(self, queue: captureSessionQueue)
     } catch {

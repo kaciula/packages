@@ -127,11 +127,25 @@ extension CameraPlugin: CameraApi {
     captureSessionQueue.async { [weak self] in
       guard let strongSelf = self else { return }
 
-      let discoveryDevices: [AVCaptureDevice.DeviceType] = [
+      var discoveryDevices: [AVCaptureDevice.DeviceType] = [
         .builtInWideAngleCamera,
         .builtInTelephotoCamera,
         .builtInUltraWideCamera,
+        .builtInDualCamera,
+        .builtInDualWideCamera,
+        .builtInTripleCamera,
+        .builtInTrueDepthCamera,
       ]
+
+      if #available(iOS 15.4, *) {
+        discoveryDevices.append(.builtInLiDARDepthCamera)
+      }
+
+      if #available(iOS 17.0, *) {
+        discoveryDevices.append(.external)
+        discoveryDevices.append(.continuityCamera)
+      }
+
 
       let devices = strongSelf.deviceDiscoverer.discoverySession(
         withDeviceTypes: discoveryDevices,
@@ -146,7 +160,9 @@ extension CameraPlugin: CameraApi {
         let cameraDescription = PlatformCameraDescription(
           name: device.uniqueID,
           lensDirection: lensFacing,
-          lensType: lensType
+          lensType: lensType,
+          availableStabilizationModes: strongSelf.availablePlatformStabilizationModes(),
+          captureDeviceType: strongSelf.platformDeviceType(for: device)
         )
         reply.append(cameraDescription)
       }
@@ -183,8 +199,53 @@ extension CameraPlugin: CameraApi {
     }
   }
 
+  private func availablePlatformStabilizationModes() -> [PlatformCameraStabilizationMode] {
+    if #available(iOS 17.0, *) {
+      return [.off, .standard, .cinematic, .cinematicExtended, .previewOptimized, .auto]
+    } else {
+      return [.off, .standard, .cinematic, .cinematicExtended, .auto]
+    }
+  }
+
+  private func platformDeviceType(for device: CaptureDevice) -> PlatformAVCaptureDeviceType {
+    let deviceType = device.deviceType
+    if deviceType == .builtInWideAngleCamera {
+      return .builtInWideAngleCamera
+    } else if deviceType == .builtInTelephotoCamera {
+      return .builtInTelephotoCamera
+    } else if deviceType == .builtInDualCamera {
+      return .builtInDualCamera
+    } else if deviceType == .builtInTrueDepthCamera {
+      return .builtInTrueDepthCamera
+    } else if deviceType == .builtInUltraWideCamera {
+      return .builtInUltraWideCamera
+    } else if deviceType == .builtInDualWideCamera {
+      return .builtInDualWideCamera
+    } else if deviceType == .builtInTripleCamera {
+      return .builtInTripleCamera
+    }
+
+    if #available(iOS 15.4, *) {
+      if deviceType == .builtInLiDARDepthCamera {
+        return .builtInLiDARDepthCamera
+      }
+    }
+
+    if #available(iOS 17.0, *) {
+      if deviceType == .external {
+        return .external
+      } else if deviceType == .continuityCamera {
+        return .continuityCamera
+      }
+    }
+
+    // Default fallback
+    return .builtInDualCamera
+  }
+
   func create(
     cameraName: String, settings: PlatformMediaSettings,
+    stabilizationMode: PlatformCameraStabilizationMode,
     completion: @escaping (Result<Int64, any Error>) -> Void
   ) {
     // Create FLTCam only if granted camera access (and audio access if audio is enabled)
@@ -214,12 +275,14 @@ extension CameraPlugin: CameraApi {
             strongSelf.createCameraOnSessionQueue(
               withName: cameraName,
               settings: settings,
+              stabilizationMode: stabilizationMode,
               completion: completion)
           }
         } else {
           strongSelf.createCameraOnSessionQueue(
             withName: cameraName,
             settings: settings,
+            stabilizationMode: stabilizationMode,
             completion: completion)
         }
       }
@@ -229,10 +292,41 @@ extension CameraPlugin: CameraApi {
   func createCameraOnSessionQueue(
     withName: String,
     settings: PlatformMediaSettings,
+    stabilizationMode: PlatformCameraStabilizationMode,
     completion: @escaping (Result<Int64, any Error>) -> Void
   ) {
     captureSessionQueue.async { [weak self] in
-      self?.sessionQueueCreateCamera(name: withName, settings: settings, completion: completion)
+      self?.sessionQueueCreateCamera(
+        name: withName,
+        settings: settings,
+        stabilizationMode: stabilizationMode,
+        completion: completion)
+    }
+  }
+
+  private func convertToAVStabilizationMode(_ mode: PlatformCameraStabilizationMode)
+    -> AVCaptureVideoStabilizationMode
+  {
+    switch mode {
+    case .off:
+      return .off
+    case .digital, .optical:
+      // Android-only modes; no direct AVFoundation equivalent.
+      return .off
+    case .standard:
+      return .standard
+    case .cinematic:
+      return .cinematic
+    case .cinematicExtended:
+      return .cinematicExtended
+    case .previewOptimized:
+      if #available(iOS 17.0, *) {
+        return .previewOptimized
+      } else {
+        return .standard
+      }
+    case .auto:
+      return .auto
     }
   }
 
@@ -241,6 +335,7 @@ extension CameraPlugin: CameraApi {
   private func sessionQueueCreateCamera(
     name: String,
     settings: PlatformMediaSettings,
+    stabilizationMode: PlatformCameraStabilizationMode,
     completion: @escaping (Result<Int64, any Error>) -> Void
   ) {
     let mediaSettingsAVWrapper = FLTCamMediaSettingsAVWrapper()
@@ -253,7 +348,8 @@ extension CameraPlugin: CameraApi {
       captureSessionFactory: captureSessionFactory,
       captureSessionQueue: captureSessionQueue,
       captureDeviceInputFactory: captureDeviceInputFactory,
-      initialCameraName: name
+      initialCameraName: name,
+      videoStabilizationMode: convertToAVStabilizationMode(stabilizationMode)
     )
 
     do {

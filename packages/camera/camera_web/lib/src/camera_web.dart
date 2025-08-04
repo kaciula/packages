@@ -155,6 +155,7 @@ class CameraPlugin extends CameraPlatform {
             name: videoInputDevice.label,
             lensDirection: lensDirection,
             sensorOrientation: 0,
+            availableStabilizationModes: const <CameraStabilizationMode>[],
           );
 
           final cameraMetadata = CameraMetadata(

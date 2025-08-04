@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart' show Uint8List;
 import 'package:flutter/services.dart' show DeviceOrientation, PlatformException;
 import 'package:flutter/widgets.dart' show Texture, Widget, visibleForTesting;
 import 'package:stream_transform/stream_transform.dart';
+
 import 'camerax_library.dart';
 import 'rotated_preview_delegate.dart';
 
@@ -325,6 +326,7 @@ class AndroidCameraCameraX extends CameraPlatform {
           name: cameraName,
           lensDirection: cameraLensDirection,
           sensorOrientation: cameraSensorOrientation,
+          availableStabilizationModes: const <CameraStabilizationMode>[],
         ),
       );
     }
@@ -340,9 +342,11 @@ class AndroidCameraCameraX extends CameraPlatform {
     CameraDescription description,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) => createCameraWithSettings(
     description,
     MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
+    stabilizationMode,
   );
 
   /// Creates an uninitialized camera instance and returns the camera ID.
@@ -365,6 +369,7 @@ class AndroidCameraCameraX extends CameraPlatform {
   Future<int> createCameraWithSettings(
     CameraDescription cameraDescription,
     MediaSettings? mediaSettings,
+    CameraStabilizationMode stabilizationMode,
   ) async {
     enableRecordingAudio = mediaSettings?.enableAudio ?? false;
     final CameraPermissionsError? error = await systemServicesManager.requestCameraPermissions(

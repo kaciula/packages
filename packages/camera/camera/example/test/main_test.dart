@@ -4,6 +4,8 @@
 
 import 'package:camera/camera.dart';
 import 'package:camera_example/main.dart';
+import 'package:camera_platform_interface/camera_platform_interface.dart'
+    show CameraStabilizationMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -24,6 +26,7 @@ void main() {
           name: 'camera_$i',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: const <CameraStabilizationMode>[],
         ),
       );
     }

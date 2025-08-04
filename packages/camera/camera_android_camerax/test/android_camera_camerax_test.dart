@@ -464,6 +464,7 @@ void main() {
             ? CameraLensDirection.front
             : CameraLensDirection.back,
         sensorOrientation: typedData['sensorOrientation']! as int,
+        availableStabilizationModes: const <CameraStabilizationMode>[],
       );
       expect(cameraDescriptions[i], cameraDescription);
     }
@@ -479,6 +480,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       const testSurfaceTextureId = 6;
@@ -646,6 +648,7 @@ void main() {
             audioBitrate: 32000,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         ),
         equals(testSurfaceTextureId),
       );
@@ -683,6 +686,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const enableAudio = true;
       final mockCamera = MockCamera();
@@ -816,6 +820,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const enableAudio = true;
       final mockCamera = MockCamera();
@@ -914,6 +919,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const enableAudio = true;
       const testCameraId = 12;
@@ -1016,6 +1022,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
       const enableAudio = true;
@@ -1171,6 +1178,7 @@ void main() {
           audioBitrate: 64000,
           enableAudio: enableAudio,
         ),
+        CameraStabilizationMode.off,
       );
       await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1203,6 +1211,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const enableAudio = true;
     final mockCamera = MockCamera();
@@ -1278,6 +1287,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const enableAudio = true;
     const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
@@ -1331,6 +1341,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const fastTargetFps = 60;
     const testCameraId = 12;
@@ -1385,6 +1396,7 @@ void main() {
     await camera.createCameraWithSettings(
       testCameraDescription,
       const MediaSettings(fps: fastTargetFps),
+      CameraStabilizationMode.off,
     );
     await camera.initializeCamera(testCameraId);
 
@@ -1598,6 +1610,7 @@ void main() {
             ? CameraLensDirection.front
             : CameraLensDirection.back,
         sensorOrientation: savedData['sensorOrientation']! as int,
+        availableStabilizationModes: const <CameraStabilizationMode>[],
       );
       expect(cameraDescriptions[i], cameraDescription);
       expect(cameraNameToInfos.containsKey(cameraDescription.name), isTrue);
@@ -1630,6 +1643,7 @@ void main() {
         audioBitrate: 32000,
         enableAudio: true,
       ),
+      CameraStabilizationMode.off,
     );
 
     // Verify CameraSelector is chosen based on specified cameraInfo.
@@ -1654,6 +1668,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const enableAudio = true;
     final mockCamera = MockCamera();
@@ -1690,6 +1705,7 @@ void main() {
     await camera.createCameraWithSettings(
       testCameraDescription,
       const MediaSettings(enableAudio: enableAudio),
+      CameraStabilizationMode.off,
     );
     await camera.initializeCamera(testSurfaceTextureId);
 
@@ -1712,6 +1728,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const enableAudio = true;
     final mockCamera = MockCamera();
@@ -1768,6 +1785,7 @@ void main() {
       await camera.createCameraWithSettings(
         testCameraDescription,
         const MediaSettings(enableAudio: enableAudio),
+        CameraStabilizationMode.off,
       );
       await camera.initializeCamera(testSurfaceTextureId, imageFormatGroup: imageFormatGroup);
 
@@ -1786,6 +1804,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const resolutionWidth = 350;
     const resolutionHeight = 750;
@@ -1924,6 +1943,7 @@ void main() {
         audioBitrate: 32000,
         enableAudio: true,
       ),
+      CameraStabilizationMode.off,
     );
 
     // Start listening to camera events stream to verify the proper CameraInitializedEvent is sent.
@@ -2800,11 +2820,13 @@ void main() {
         name: '0',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const testFrontCameraDescription = CameraDescription(
         name: '1',
         lensDirection: CameraLensDirection.front,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       // Mock/Detached objects for (typically attached) objects created by
@@ -2963,6 +2985,7 @@ void main() {
       final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
         testBackCameraDescription,
         const MediaSettings(enableAudio: true),
+        CameraStabilizationMode.off,
       );
       await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -3017,11 +3040,13 @@ void main() {
         name: '0',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const testFrontCameraDescription = CameraDescription(
         name: '1',
         lensDirection: CameraLensDirection.front,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       // Mock/Detached objects for (typically attached) objects created by
@@ -3167,6 +3192,7 @@ void main() {
       final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
         testBackCameraDescription,
         const MediaSettings(enableAudio: true),
+        CameraStabilizationMode.off,
       );
       await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -4117,6 +4143,7 @@ void main() {
           name: 'test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.low,
       );

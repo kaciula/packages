@@ -57,9 +57,13 @@ class MockCameraApi extends _i1.Mock implements _i2.CameraApi {
           as _i4.Future<List<_i2.PlatformCameraDescription>>);
 
   @override
-  _i4.Future<int> create(String? cameraName, _i2.PlatformMediaSettings? settings) =>
+  _i4.Future<int> create(
+    String? cameraName,
+    _i2.PlatformMediaSettings? settings,
+    _i2.PlatformCameraStabilizationMode? stabilizationMode,
+  ) =>
       (super.noSuchMethod(
-            Invocation.method(#create, [cameraName, settings]),
+            Invocation.method(#create, [cameraName, settings, stabilizationMode]),
             returnValue: _i4.Future<int>.value(0),
             returnValueForMissingStub: _i4.Future<int>.value(0),
           )

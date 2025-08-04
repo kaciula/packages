@@ -19,6 +19,29 @@ CameraLensDirection parseCameraLensDirection(String string) {
   throw ArgumentError('Unknown CameraLensDirection value');
 }
 
+/// Parses a string into a corresponding CameraStabilizationMode.
+CameraStabilizationMode parseStabilizationMode(String mode) {
+  switch (mode) {
+    case 'off':
+      return CameraStabilizationMode.off;
+    case 'digital':
+      return CameraStabilizationMode.digital;
+    case 'optical':
+      return CameraStabilizationMode.optical;
+    case 'standard':
+      return CameraStabilizationMode.standard;
+    case 'cinematic':
+      return CameraStabilizationMode.cinematic;
+    case 'cinematicExtended':
+      return CameraStabilizationMode.cinematicExtended;
+    case 'previewOptimized':
+      return CameraStabilizationMode.previewOptimized;
+    case 'auto':
+      return CameraStabilizationMode.auto;
+  }
+  throw ArgumentError('Unknown CameraStabilizationMode value $mode');
+}
+
 /// Returns the device orientation as a String.
 String serializeDeviceOrientation(DeviceOrientation orientation) {
   switch (orientation) {

@@ -5,15 +5,20 @@
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:flutter/services.dart';
 
+import 'avfoundation_camera_description.dart';
 import 'messages.g.dart';
 
 /// Creates a [CameraDescription] from a Pigeon [PlatformCameraDescription].
-CameraDescription cameraDescriptionFromPlatform(PlatformCameraDescription camera) {
-  return CameraDescription(
+AVCameraDescription cameraDescriptionFromPlatform(PlatformCameraDescription camera) {
+  return AVCameraDescription(
     name: camera.name,
     lensDirection: cameraLensDirectionFromPlatform(camera.lensDirection),
     sensorOrientation: 90,
     lensType: cameraLensTypeFromPlatform(camera.lensType),
+    availableStabilizationModes: camera.availableStabilizationModes
+        .map((PlatformCameraStabilizationMode it) => stabilizationModeFromPlatform(it))
+        .toList(),
+    captureDeviceType: captureDeviceTypeFromPlatform(camera.captureDeviceType),
   );
 }
 
@@ -80,5 +85,77 @@ FocusMode focusModeFromPlatform(PlatformFocusMode mode) {
   return switch (mode) {
     PlatformFocusMode.auto => FocusMode.auto,
     PlatformFocusMode.locked => FocusMode.locked,
+  };
+}
+
+/// Converts a [CameraStabilizationMode] to a Pigeon [PlatformCameraStabilizationMode].
+PlatformCameraStabilizationMode serializeStabilizationMode(
+    CameraStabilizationMode mode) {
+  switch (mode) {
+    case CameraStabilizationMode.off:
+      return PlatformCameraStabilizationMode.off;
+    case CameraStabilizationMode.digital:
+      return PlatformCameraStabilizationMode.digital;
+    case CameraStabilizationMode.optical:
+      return PlatformCameraStabilizationMode.optical;
+    case CameraStabilizationMode.standard:
+      return PlatformCameraStabilizationMode.standard;
+    case CameraStabilizationMode.cinematic:
+      return PlatformCameraStabilizationMode.cinematic;
+    case CameraStabilizationMode.cinematicExtended:
+      return PlatformCameraStabilizationMode.cinematicExtended;
+    case CameraStabilizationMode.previewOptimized:
+      return PlatformCameraStabilizationMode.previewOptimized;
+    case CameraStabilizationMode.auto:
+      return PlatformCameraStabilizationMode.auto;
+  }
+}
+
+/// Parses a string into a corresponding CameraStabilizationMode.
+CameraStabilizationMode stabilizationModeFromPlatform(
+    PlatformCameraStabilizationMode mode) {
+  switch (mode) {
+    case PlatformCameraStabilizationMode.off:
+      return CameraStabilizationMode.off;
+    case PlatformCameraStabilizationMode.digital:
+      return CameraStabilizationMode.digital;
+    case PlatformCameraStabilizationMode.optical:
+      return CameraStabilizationMode.optical;
+    case PlatformCameraStabilizationMode.standard:
+      return CameraStabilizationMode.standard;
+    case PlatformCameraStabilizationMode.cinematic:
+      return CameraStabilizationMode.cinematic;
+    case PlatformCameraStabilizationMode.cinematicExtended:
+      return CameraStabilizationMode.cinematicExtended;
+    case PlatformCameraStabilizationMode.previewOptimized:
+      return CameraStabilizationMode.previewOptimized;
+    case PlatformCameraStabilizationMode.auto:
+      return CameraStabilizationMode.auto;
+  }
+}
+
+/// Converts a Pigeon [PlatformCameraLensDirection] to a [CameraLensDirection].
+AVCaptureDeviceType captureDeviceTypeFromPlatform(
+    PlatformAVCaptureDeviceType deviceType) {
+  return switch (deviceType) {
+    PlatformAVCaptureDeviceType.builtInWideAngleCamera =>
+      AVCaptureDeviceType.builtInWideAngleCamera,
+    PlatformAVCaptureDeviceType.builtInUltraWideCamera =>
+      AVCaptureDeviceType.builtInUltraWideCamera,
+    PlatformAVCaptureDeviceType.builtInTelephotoCamera =>
+      AVCaptureDeviceType.builtInTelephotoCamera,
+    PlatformAVCaptureDeviceType.builtInDualCamera =>
+      AVCaptureDeviceType.builtInDualCamera,
+    PlatformAVCaptureDeviceType.builtInDualWideCamera =>
+      AVCaptureDeviceType.builtInDualWideCamera,
+    PlatformAVCaptureDeviceType.builtInTripleCamera =>
+      AVCaptureDeviceType.builtInTripleCamera,
+    PlatformAVCaptureDeviceType.continuityCamera =>
+      AVCaptureDeviceType.continuityCamera,
+    PlatformAVCaptureDeviceType.external => AVCaptureDeviceType.external,
+    PlatformAVCaptureDeviceType.builtInLiDARDepthCamera =>
+      AVCaptureDeviceType.builtInLiDARDepthCamera,
+    PlatformAVCaptureDeviceType.builtInTrueDepthCamera =>
+      AVCaptureDeviceType.builtInTrueDepthCamera,
   };
 }

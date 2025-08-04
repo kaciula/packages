@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:async/async.dart';
+import 'package:camera_avfoundation/camera_avfoundation.dart';
 import 'package:camera_avfoundation/src/avfoundation_camera.dart';
 import 'package:camera_avfoundation/src/messages.g.dart';
 import 'package:camera_avfoundation/src/utils.dart';
@@ -31,7 +32,7 @@ void main() {
     test('Should send creation data and receive back a camera id', () async {
       // Arrange
       final mockApi = MockCameraApi();
-      when(mockApi.create(any, any)).thenAnswer((_) async => 1);
+      when(mockApi.create(any, any, any)).thenAnswer((_) async => 1);
       final camera = AVFoundationCamera(api: mockApi);
       const cameraName = 'Test';
 
@@ -41,12 +42,13 @@ void main() {
           name: cameraName,
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
 
       // Assert
-      final VerificationResult verification = verify(mockApi.create(captureAny, captureAny));
+      final VerificationResult verification = verify(mockApi.create(captureAny, captureAny, captureAny));
       expect(verification.captured[0], cameraName);
       final settings = verification.captured[1] as PlatformMediaSettings?;
       expect(settings, isNotNull);
@@ -59,7 +61,7 @@ void main() {
       () async {
         // Arrange
         final mockApi = MockCameraApi();
-        when(mockApi.create(any, any)).thenAnswer((_) async => 1);
+        when(mockApi.create(any, any, any)).thenAnswer((_) async => 1);
         final camera = AVFoundationCamera(api: mockApi);
         const cameraName = 'Test';
         const fps = 15;
@@ -72,6 +74,7 @@ void main() {
             name: cameraName,
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -80,10 +83,11 @@ void main() {
             audioBitrate: audioBitrate,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         );
 
         // Assert
-        final VerificationResult verification = verify(mockApi.create(captureAny, captureAny));
+        final VerificationResult verification = verify(mockApi.create(captureAny, captureAny, captureAny));
         expect(verification.captured[0], cameraName);
         final settings = verification.captured[1] as PlatformMediaSettings?;
         expect(settings, isNotNull);
@@ -101,7 +105,7 @@ void main() {
       const exceptionCode = 'TESTING_ERROR_CODE';
       const exceptionMessage = 'Mock error message used during testing.';
       final mockApi = MockCameraApi();
-      when(mockApi.create(any, any)).thenAnswer((_) async {
+      when(mockApi.create(any, any, any)).thenAnswer((_) async {
         throw PlatformException(code: exceptionCode, message: exceptionMessage);
       });
       final camera = AVFoundationCamera(api: mockApi);
@@ -113,6 +117,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.high,
         ),
@@ -158,6 +163,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -185,6 +191,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -208,13 +215,14 @@ void main() {
     late int cameraId;
     setUp(() async {
       final mockApi = MockCameraApi();
-      when(mockApi.create(any, any)).thenAnswer((_) async => 1);
+      when(mockApi.create(any, any, any)).thenAnswer((_) async => 1);
       camera = AVFoundationCamera(api: mockApi);
       cameraId = await camera.createCamera(
         const CameraDescription(
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -307,13 +315,14 @@ void main() {
 
     setUp(() async {
       mockApi = MockCameraApi();
-      when(mockApi.create(any, any)).thenAnswer((_) async => 1);
+      when(mockApi.create(any, any, any)).thenAnswer((_) async => 1);
       camera = AVFoundationCamera(api: mockApi);
       cameraId = await camera.createCamera(
         const CameraDescription(
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -330,11 +339,15 @@ void main() {
           name: 'Test 1',
           lensDirection: PlatformCameraLensDirection.front,
           lensType: PlatformCameraLensType.ultraWide,
+          availableStabilizationModes: <PlatformCameraStabilizationMode>[],
+          captureDeviceType: PlatformAVCaptureDeviceType.builtInDualCamera,
         ),
         PlatformCameraDescription(
           name: 'Test 2',
           lensDirection: PlatformCameraLensDirection.back,
           lensType: PlatformCameraLensType.telephoto,
+          availableStabilizationModes: <PlatformCameraStabilizationMode>[],
+          captureDeviceType: PlatformAVCaptureDeviceType.builtInDualCamera,
         ),
       ];
       when(mockApi.getAvailableCameras()).thenAnswer((_) async => returnData);
@@ -429,6 +442,7 @@ void main() {
         name: 'Test2',
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 0,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       await camera.setDescriptionWhileRecording(camera2Description);

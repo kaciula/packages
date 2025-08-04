@@ -19,11 +19,13 @@ List<CameraDescription> get mockAvailableCameras => <CameraDescription>[
     name: 'camBack',
     lensDirection: CameraLensDirection.back,
     sensorOrientation: 90,
+    availableStabilizationModes: <CameraStabilizationMode>[],
   ),
   const CameraDescription(
     name: 'camFront',
     lensDirection: CameraLensDirection.front,
     sensorOrientation: 180,
+    availableStabilizationModes: <CameraStabilizationMode>[],
   ),
 ];
 
@@ -85,6 +87,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -101,6 +104,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.low,
         fps: 15,
@@ -126,6 +130,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -144,6 +149,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -164,6 +170,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -195,6 +202,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -217,6 +225,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
         imageFormatGroup: ImageFormatGroup.yuv420,
@@ -233,6 +242,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
         imageFormatGroup: ImageFormatGroup.bgra8888,
@@ -253,6 +263,7 @@ void main() {
           name: 'cam2',
           lensDirection: CameraLensDirection.front,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
       );
       verifyNever(CameraPlatform.instance.dispose(mockInitializeCamera));
@@ -269,6 +280,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -285,6 +297,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -312,6 +325,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -336,6 +350,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -351,6 +366,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -372,6 +388,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -399,6 +416,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -425,6 +443,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -453,6 +472,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -480,6 +500,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -509,6 +530,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -528,6 +550,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -556,6 +579,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -583,6 +607,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -612,6 +637,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -631,6 +657,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -659,6 +686,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -686,6 +714,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -717,6 +746,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -733,6 +763,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -751,6 +782,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -778,6 +810,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -796,6 +829,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -823,6 +857,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -844,6 +879,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -874,6 +910,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -894,6 +931,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -921,6 +959,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -941,6 +980,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -968,6 +1008,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -990,6 +1031,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1017,6 +1059,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1045,6 +1088,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1080,6 +1124,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1139,6 +1184,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1208,6 +1254,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1235,6 +1282,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1260,6 +1308,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1292,6 +1341,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1326,6 +1376,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1361,6 +1412,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -1407,6 +1459,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1461,6 +1514,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1519,6 +1573,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1578,6 +1633,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1636,6 +1692,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1694,6 +1751,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1757,6 +1815,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1820,6 +1879,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1884,6 +1944,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -1948,6 +2009,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2014,6 +2076,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2079,6 +2142,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2145,6 +2209,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2211,6 +2276,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2265,6 +2331,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2323,6 +2390,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2381,6 +2449,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2439,6 +2508,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2501,6 +2571,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2559,6 +2630,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2617,6 +2689,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2675,6 +2748,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2742,6 +2816,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2809,6 +2884,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2879,6 +2955,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -2948,6 +3025,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -3017,6 +3095,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -3093,6 +3172,7 @@ void main() {
             name: 'cam',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.max,
         );
@@ -3159,6 +3239,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3180,6 +3261,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3198,6 +3280,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3225,6 +3308,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3251,6 +3335,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3269,6 +3354,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3287,6 +3373,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3314,6 +3401,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3347,6 +3435,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3376,6 +3465,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3393,6 +3483,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3419,6 +3510,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3439,6 +3531,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3463,6 +3556,7 @@ void main() {
           name: 'cam',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 90,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.max,
       );
@@ -3504,6 +3598,7 @@ class MockCameraPlatform extends Mock with MockPlatformInterfaceMixin implements
   Future<int> createCameraWithSettings(
     CameraDescription cameraDescription,
     MediaSettings? mediaSettings,
+    CameraStabilizationMode stabilizationMode,
   ) => mockPlatformException
       ? throw PlatformException(code: 'foo', message: 'bar')
       : Future<int>.value(mockInitializeCamera);
@@ -3513,7 +3608,8 @@ class MockCameraPlatform extends Mock with MockPlatformInterfaceMixin implements
     CameraDescription description,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
-  }) => createCameraWithSettings(description, null);
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
+  }) => createCameraWithSettings(description, null, stabilizationMode);
 
   @override
   Stream<CameraInitializedEvent> onCameraInitialized(int cameraId) =>
@@ -3651,7 +3747,9 @@ class MockCameraPlatform extends Mock with MockPlatformInterfaceMixin implements
 class MockCameraDescription extends CameraDescription {
   /// Creates a new camera description with the given properties.
   const MockCameraDescription()
-    : super(name: 'Test', lensDirection: CameraLensDirection.back, sensorOrientation: 0);
+    : super(name: 'Test', lensDirection: CameraLensDirection.back, sensorOrientation: 0,
+      availableStabilizationModes: const <CameraStabilizationMode>[],
+    );
 
   @override
   CameraLensDirection get lensDirection => CameraLensDirection.back;

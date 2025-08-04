@@ -357,6 +357,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -406,6 +407,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -453,6 +455,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -500,6 +503,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -580,6 +584,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -628,6 +633,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -676,6 +682,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -724,6 +731,7 @@ void main() {
           final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
           await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -803,6 +811,7 @@ void main() {
         final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
         await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -893,6 +902,7 @@ void main() {
         final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
         await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -997,6 +1007,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1052,6 +1063,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1107,6 +1119,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1162,6 +1175,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1258,6 +1272,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1312,6 +1327,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1370,6 +1386,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1426,6 +1443,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1515,6 +1533,7 @@ void main() {
         final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
         await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1619,6 +1638,7 @@ void main() {
         final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
         await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1743,6 +1763,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1799,6 +1820,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1888,6 +1910,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 
@@ -1960,6 +1983,7 @@ void main() {
             final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
             await camera.initializeCamera(flutterSurfaceTextureId);
 

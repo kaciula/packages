@@ -25,6 +25,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -49,6 +50,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -74,6 +76,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -98,6 +101,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -118,6 +122,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -142,6 +147,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -165,6 +171,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -187,6 +194,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );
@@ -204,6 +212,7 @@ void main() {
         name: 'cam',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       ),
       ResolutionPreset.max,
     );

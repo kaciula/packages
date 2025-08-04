@@ -75,15 +75,18 @@ class AVFoundationCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) => createCameraWithSettings(
     cameraDescription,
     MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
+    stabilizationMode,
   );
 
   @override
   Future<int> createCameraWithSettings(
     CameraDescription cameraDescription,
     MediaSettings? mediaSettings,
+    CameraStabilizationMode stabilizationMode,
   ) async {
     try {
       return await _hostApi.create(
@@ -95,6 +98,7 @@ class AVFoundationCamera extends CameraPlatform {
           audioBitrate: mediaSettings?.audioBitrate,
           enableAudio: mediaSettings?.enableAudio ?? true,
         ),
+        serializeStabilizationMode(stabilizationMode),
       );
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);

@@ -18,6 +18,7 @@ class FakeController extends ValueNotifier<CameraValue> implements CameraControl
     lensDirection: CameraLensDirection.back,
     sensorOrientation: 0,
     lensType: CameraLensType.ultraWide,
+    availableStabilizationModes: <CameraStabilizationMode>[],
   );
 
   @override
@@ -150,6 +151,9 @@ class FakeController extends ValueNotifier<CameraValue> implements CameraControl
 
   @override
   bool supportsImageStreaming() => true;
+
+  @override
+  CameraStabilizationMode get stabilizationMode => CameraStabilizationMode.off;
 }
 
 void main() {
