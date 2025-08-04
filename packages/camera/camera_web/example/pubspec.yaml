@@ -6,7 +6,8 @@ environment:
   flutter: ">=3.38.0"
 
 dependencies:
-  camera_platform_interface: ^2.6.0
+  camera_platform_interface: # ^2.6.0
+    path: ../../camera_platform_interface
   camera_web:
     # When depending on this package from a real application you should use:
     #   camera_web: ^x.y.z
