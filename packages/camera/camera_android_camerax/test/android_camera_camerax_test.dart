@@ -737,6 +737,7 @@ void main() {
                   ? CameraLensDirection.front
                   : CameraLensDirection.back,
           sensorOrientation: typedData['sensorOrientation']! as int,
+          availableStabilizationModes: const <CameraStabilizationMode>[],
         );
         expect(cameraDescriptions[i], cameraDescription);
       }
@@ -753,6 +754,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       const int testSurfaceTextureId = 6;
@@ -1022,6 +1024,7 @@ void main() {
             audioBitrate: 32000,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         ),
         equals(testSurfaceTextureId),
       );
@@ -1069,6 +1072,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
       const bool enableAudio = true;
@@ -1321,6 +1325,7 @@ void main() {
           audioBitrate: 64000,
           enableAudio: enableAudio,
         ),
+        CameraStabilizationMode.off,
       );
 
       // Verify expected UseCases were bound.
@@ -1353,6 +1358,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const bool enableAudio = true;
       final MockCamera mockCamera = MockCamera();
@@ -1497,6 +1503,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const bool enableAudio = true;
       final MockCamera mockCamera = MockCamera();
@@ -1645,6 +1652,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const bool enableAudio = true;
       final MockCamera mockCamera = MockCamera();
@@ -1774,6 +1782,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const bool enableAudio = true;
       final MockCamera mockCamera = MockCamera();
@@ -1880,6 +1889,7 @@ void main() {
         name: 'cameraName',
         lensDirection: testLensDirection,
         sensorOrientation: testSensorOrientation,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const bool enableAudio = true;
       const ResolutionPreset testResolutionPreset = ResolutionPreset.veryHigh;
@@ -2255,6 +2265,7 @@ void main() {
                   ? CameraLensDirection.front
                   : CameraLensDirection.back,
           sensorOrientation: savedData['sensorOrientation']! as int,
+          availableStabilizationModes: const <CameraStabilizationMode>[],
         );
         expect(cameraDescriptions[i], cameraDescription);
         expect(cameraNameToInfos.containsKey(cameraDescription.name), isTrue);
@@ -2291,6 +2302,7 @@ void main() {
           audioBitrate: 32000,
           enableAudio: true,
         ),
+        CameraStabilizationMode.off,
       );
 
       // Verify CameraSelector is chosen based on specified cameraInfo.
@@ -2318,6 +2330,7 @@ void main() {
       name: 'cameraName',
       lensDirection: testLensDirection,
       sensorOrientation: testSensorOrientation,
+      availableStabilizationModes: <CameraStabilizationMode>[],
     );
     const int resolutionWidth = 350;
     const int resolutionHeight = 750;
@@ -2569,6 +2582,7 @@ void main() {
         audioBitrate: 32000,
         enableAudio: true,
       ),
+      CameraStabilizationMode.off,
     );
 
     // Start listening to camera events stream to verify the proper CameraInitializedEvent is sent.
@@ -3788,6 +3802,7 @@ void main() {
             name: 'fakeCameraName',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 90,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
         );
         verifyNoMoreInteractions(camera.processCameraProvider);

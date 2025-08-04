@@ -249,6 +249,7 @@ class CameraController extends ValueNotifier<CameraValue> {
     int? videoBitrate,
     int? audioBitrate,
     this.imageFormatGroup,
+    this.stabilizationMode = CameraStabilizationMode.off,
   })  : mediaSettings = MediaSettings(
             resolutionPreset: resolutionPreset,
             enableAudio: enableAudio,
@@ -284,6 +285,9 @@ class CameraController extends ValueNotifier<CameraValue> {
   ///
   /// When null the imageFormat will fallback to the platforms default.
   final ImageFormatGroup? imageFormatGroup;
+
+  /// The camera stabilization mode.
+  final CameraStabilizationMode stabilizationMode;
 
   /// The id of a camera that hasn't been initialized.
   @visibleForTesting
@@ -344,6 +348,7 @@ class CameraController extends ValueNotifier<CameraValue> {
       _cameraId = await CameraPlatform.instance.createCameraWithSettings(
         description,
         mediaSettings,
+        stabilizationMode,
       );
 
       _unawaited(CameraPlatform.instance

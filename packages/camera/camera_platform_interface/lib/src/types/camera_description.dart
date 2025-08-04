@@ -33,6 +33,33 @@ enum CameraLensType {
   unknown,
 }
 
+/// The mode of camera stabilization.
+enum CameraStabilizationMode {
+  /// No stabilization.
+  off,
+
+  /// Stabilization using digital video stabilization.
+  digital, // Android only
+
+  /// Stabilization using optical video stabilization (OIS).
+  optical, // Android only
+
+  /// A mode that uses the standard algorithm.
+  standard, // iOS only
+
+  /// A mode that uses the cinematic stabilization algorithm.
+  cinematic, // iOS only
+
+  /// A mode that uses the extended cinematic stabilization algorithm.
+  cinematicExtended, // iOS only
+
+  /// A mode that uses the preview optimized stabilization algorithm.
+  previewOptimized, // iOS only
+
+  /// A mode that indicates the system chooses the most appropriate video stabilization mode for the device and format.
+  auto, // iOS only
+}
+
 /// Properties of a camera device.
 @immutable
 class CameraDescription {
@@ -42,6 +69,7 @@ class CameraDescription {
     required this.lensDirection,
     required this.sensorOrientation,
     this.lensType = CameraLensType.unknown,
+    required this.availableStabilizationModes,
   });
 
   /// The name of the camera device.
@@ -61,6 +89,9 @@ class CameraDescription {
 
   /// The type of lens the camera has.
   final CameraLensType lensType;
+
+  /// The available stabilization modes for the camera.
+  final List<CameraStabilizationMode> availableStabilizationModes;
 
   @override
   bool operator ==(Object other) =>

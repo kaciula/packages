@@ -162,6 +162,7 @@ void main() {
             name: 'back',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.low,
         ),
@@ -177,6 +178,7 @@ void main() {
         name: 'back',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 0,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       const MediaSettings mediaSettings = MediaSettings(
@@ -217,6 +219,7 @@ void main() {
       cameraPlatform.createCameraWithSettings(
         cameraDescription,
         mediaSettings,
+        CameraStabilizationMode.off,
       );
 
       expect(createCameraCalled, isTrue,
@@ -514,9 +517,11 @@ void main() {
   group('exports', () {
     test('CameraDescription is exported', () {
       const CameraDescription(
-          name: 'abc-123',
-          sensorOrientation: 1,
-          lensDirection: CameraLensDirection.external);
+        name: 'abc-123',
+        sensorOrientation: 1,
+        lensDirection: CameraLensDirection.external,
+        availableStabilizationModes: <CameraStabilizationMode>[],
+      );
     });
 
     test('CameraException is exported', () {
@@ -577,7 +582,9 @@ class OverriddenCameraPlatform extends CameraPlatform {
   @override
   Future<int> createCamera(
       CameraDescription cameraDescription, ResolutionPreset? resolutionPreset,
-      {bool enableAudio = false}) {
+      {bool enableAudio = false,
+      CameraStabilizationMode stabilizationMode =
+          CameraStabilizationMode.off}) {
     _onCreateCameraCalled(cameraDescription, resolutionPreset, enableAudio);
     return Future<int>.value(0);
   }

@@ -15,7 +15,11 @@ class FakeController extends ValueNotifier<CameraValue>
   FakeController() : super(const CameraValue.uninitialized(fakeDescription));
 
   static const CameraDescription fakeDescription = CameraDescription(
-      name: '', lensDirection: CameraLensDirection.back, sensorOrientation: 0);
+    name: '',
+    lensDirection: CameraLensDirection.back,
+    sensorOrientation: 0,
+    availableStabilizationModes: <CameraStabilizationMode>[],
+  );
 
   @override
   Future<void> dispose() async {
@@ -135,6 +139,9 @@ class FakeController extends ValueNotifier<CameraValue>
 
   @override
   bool supportsImageStreaming() => true;
+
+  @override
+  CameraStabilizationMode get stabilizationMode => CameraStabilizationMode.off;
 }
 
 void main() {

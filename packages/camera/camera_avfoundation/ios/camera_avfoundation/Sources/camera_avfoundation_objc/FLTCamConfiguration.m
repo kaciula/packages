@@ -14,7 +14,8 @@
                   captureSessionQueue:(dispatch_queue_t)captureSessionQueue
             captureDeviceInputFactory:
                 (NSObject<FLTCaptureDeviceInputFactory> *)captureDeviceInputFactory
-                    initialCameraName:(NSString *)initialCameraName {
+                    initialCameraName:(NSString *)initialCameraName
+              videoStabilizationMode:(AVCaptureVideoStabilizationMode)videoStabilizationMode {
   self = [super init];
   if (self) {
     _mediaSettings = mediaSettings;
@@ -31,6 +32,7 @@
     };
     _captureDeviceInputFactory = captureDeviceInputFactory;
     _initialCameraName = initialCameraName;
+    _videoStabilizationMode = videoStabilizationMode;
     _assetWriterFactory = ^id<FLTAssetWriter>(NSURL *url, AVFileType fileType, NSError **error) {
       return [[FLTDefaultAssetWriter alloc] initWithURL:url fileType:fileType error:error];
     };

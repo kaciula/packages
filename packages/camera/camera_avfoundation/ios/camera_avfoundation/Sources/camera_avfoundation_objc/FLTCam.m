@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #import "./include/camera_avfoundation/FLTCam.h"
+#include <Foundation/Foundation.h>
 #import "./include/camera_avfoundation/FLTCam_Test.h"
 
 @import Flutter;
@@ -29,6 +30,7 @@
     NSObject<FLTAssetWriterInputPixelBufferAdaptor> *assetWriterPixelBufferAdaptor;
 @property(strong, nonatomic) AVCaptureVideoDataOutput *videoOutput;
 @property(assign, nonatomic) BOOL isAudioSetup;
+@property(assign, nonatomic) AVCaptureVideoStabilizationMode videoStabilizationMode;
 
 /// A wrapper for CMVideoFormatDescriptionGetDimensions.
 /// Allows for alternate implementations in tests.
@@ -51,6 +53,7 @@ NSString *const errorMethod = @"error";
   NSAssert(self, @"super init cannot be nil");
   _mediaSettings = configuration.mediaSettings;
   _mediaSettingsAVWrapper = configuration.mediaSettingsWrapper;
+  _videoStabilizationMode = configuration.videoStabilizationMode;
 
   _captureSessionQueue = configuration.captureSessionQueue;
   _videoCaptureSession = configuration.videoCaptureSession;
@@ -165,6 +168,10 @@ NSString *const errorMethod = @"error";
                                              output:_captureVideoOutput.avOutput];
   if ([_captureDevice position] == AVCaptureDevicePositionFront) {
     connection.videoMirrored = YES;
+  }
+
+  if (connection.isVideoStabilizationSupported) {
+    connection.preferredVideoStabilizationMode = _videoStabilizationMode;
   }
 
   return connection;

@@ -67,9 +67,9 @@ class AVFoundationCamera extends CameraPlatform {
   @override
   Future<List<CameraDescription>> availableCameras() async {
     try {
-      return (await _hostApi.getAvailableCameras())
-          .map(cameraDescriptionFromPlatform)
-          .toList();
+      final List<PlatformCameraDescription> cameras =
+          await _hostApi.getAvailableCameras();
+      return cameras.map(cameraDescriptionFromPlatform).toList();
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
@@ -80,30 +80,36 @@ class AVFoundationCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) =>
       createCameraWithSettings(
-          cameraDescription,
-          MediaSettings(
-            resolutionPreset: resolutionPreset,
-            enableAudio: enableAudio,
-          ));
+        cameraDescription,
+        MediaSettings(
+          resolutionPreset: resolutionPreset,
+          enableAudio: enableAudio,
+        ),
+        stabilizationMode,
+      );
 
   @override
   Future<int> createCameraWithSettings(
     CameraDescription cameraDescription,
     MediaSettings? mediaSettings,
+    CameraStabilizationMode stabilizationMode,
   ) async {
     try {
       return await _hostApi.create(
-          cameraDescription.name,
-          PlatformMediaSettings(
-            resolutionPreset:
-                _pigeonResolutionPreset(mediaSettings?.resolutionPreset),
-            framesPerSecond: mediaSettings?.fps,
-            videoBitrate: mediaSettings?.videoBitrate,
-            audioBitrate: mediaSettings?.audioBitrate,
-            enableAudio: mediaSettings?.enableAudio ?? true,
-          ));
+        cameraDescription.name,
+        PlatformMediaSettings(
+          resolutionPreset:
+              _pigeonResolutionPreset(mediaSettings?.resolutionPreset),
+          framesPerSecond: mediaSettings?.fps,
+          videoBitrate: mediaSettings?.videoBitrate,
+          audioBitrate: mediaSettings?.audioBitrate,
+          enableAudio: mediaSettings?.enableAudio ?? true,
+        ),
+        serializeStabilizationMode(stabilizationMode),
+      );
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }

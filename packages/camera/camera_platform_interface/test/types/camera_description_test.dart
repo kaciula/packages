@@ -31,6 +31,7 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       expect(description.name, 'Test');
@@ -45,12 +46,14 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const CameraDescription secondDescription = CameraDescription(
         name: 'Test',
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       expect(firstDescription == secondDescription, true);
@@ -62,12 +65,14 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const CameraDescription secondDescription = CameraDescription(
         name: 'Testing',
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       expect(firstDescription == secondDescription, false);
@@ -79,12 +84,14 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const CameraDescription secondDescription = CameraDescription(
         name: 'Test',
         lensDirection: CameraLensDirection.back,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       expect(firstDescription == secondDescription, false);
@@ -96,12 +103,14 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 0,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       const CameraDescription secondDescription = CameraDescription(
         name: 'Test',
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       expect(firstDescription == secondDescription, true);
@@ -114,6 +123,7 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 0,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
       final int expectedHashCode = Object.hash(
           description.name, description.lensDirection, description.lensType);
@@ -127,6 +137,7 @@ void main() {
         lensDirection: CameraLensDirection.front,
         sensorOrientation: 90,
         lensType: CameraLensType.ultraWide,
+        availableStabilizationModes: <CameraStabilizationMode>[],
       );
 
       expect(

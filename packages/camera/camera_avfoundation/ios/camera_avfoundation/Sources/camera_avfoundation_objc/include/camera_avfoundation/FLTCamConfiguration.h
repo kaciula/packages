@@ -45,7 +45,8 @@ typedef CMVideoDimensions (^VideoDimensionsForFormat)(NSObject<FLTCaptureDeviceF
                   captureSessionQueue:(dispatch_queue_t)captureSessionQueue
             captureDeviceInputFactory:
                 (NSObject<FLTCaptureDeviceInputFactory> *)captureDeviceInputFactory
-                    initialCameraName:(NSString *)initialCameraName;
+                    initialCameraName:(NSString *)initialCameraName
+              videoStabilizationMode:(AVCaptureVideoStabilizationMode)videoStabilizationMode;
 
 @property(nonatomic, strong) id<FLTDeviceOrientationProviding> deviceOrientationProvider;
 @property(nonatomic, strong) dispatch_queue_t captureSessionQueue;
@@ -61,6 +62,7 @@ typedef CMVideoDimensions (^VideoDimensionsForFormat)(NSObject<FLTCaptureDeviceF
 @property(nonatomic, copy) AssetWriterFactory assetWriterFactory;
 @property(nonatomic, copy) InputPixelBufferAdaptorFactory inputPixelBufferAdaptorFactory;
 @property(nonatomic, copy) NSString *initialCameraName;
+@property(nonatomic, assign) AVCaptureVideoStabilizationMode videoStabilizationMode;
 
 @end
 

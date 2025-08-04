@@ -84,6 +84,8 @@ class PlatformCameraDescription {
   PlatformCameraDescription({
     required this.name,
     required this.lensDirection,
+    required this.availableStabilizationModes,
+    required this.captureDeviceType,
   });
 
   /// The name of the camera device.
@@ -91,6 +93,71 @@ class PlatformCameraDescription {
 
   /// The direction the camera is facing.
   final PlatformCameraLensDirection lensDirection;
+
+  final List<PlatformCameraStabilizationMode> availableStabilizationModes;
+
+  final PlatformAVCaptureDeviceType captureDeviceType;
+}
+
+/// The mode of camera stabilization.
+enum PlatformCameraStabilizationMode {
+  /// No stabilization.
+  off,
+
+  /// Stabilization using digital video stabilization.
+  digital, // Android only
+
+  /// Stabilization using optical video stabilization (OIS).
+  optical, // Android only
+
+  /// A mode that uses the standard algorithm.
+  standard, // iOS only
+
+  /// A mode that uses the cinematic stabilization algorithm.
+  cinematic, // iOS only
+
+  /// A mode that uses the extended cinematic stabilization algorithm.
+  cinematicExtended, // iOS only
+
+  /// A mode that uses the preview optimized stabilization algorithm.
+  previewOptimized, // iOS only
+
+  /// A mode that indicates the system chooses the most appropriate video stabilization mode for the device and format.
+  auto, // iOS only
+}
+
+/// Capture device types used on Apple Device. Mirror of AVCaptureDevice.DeviceType:
+/// https://developer.apple.com/documentation/avfoundation/avcapturedevice/devicetype
+enum PlatformAVCaptureDeviceType {
+  /// A built-in wide-angle camera device type.
+  builtInWideAngleCamera,
+
+  /// A built-in camera device type with a shorter focal length than a wide-angle camera.
+  builtInUltraWideCamera,
+
+  /// A built-in camera device type with a longer focal length than a wide-angle camera.
+  builtInTelephotoCamera,
+
+  /// A built-in camera device type that consists of a wide-angle and telephoto camera.
+  builtInDualCamera,
+
+  /// A built-in camera device type that consists of two cameras of fixed focal length, one ultrawide angle and one wide angle.
+  builtInDualWideCamera,
+
+  /// A built-in camera device type that consists of three cameras of fixed focal length, one ultrawide angle, one wide angle, and one telephoto.
+  builtInTripleCamera,
+
+  /// A Continuity Camera device type.
+  continuityCamera,
+
+  /// An external device type.
+  external,
+
+  /// A device that consists of two cameras, one LiDAR and one YUV.
+  builtInLiDARDepthCamera,
+
+  /// A device that consists of two cameras, one Infrared and one YUV.
+  builtInTrueDepthCamera,
 }
 
 // Pigeon version of the data needed for a CameraInitializedEvent.
@@ -164,8 +231,9 @@ abstract class CameraApi {
 
   /// Create a new camera with the given settings, and returns its ID.
   @async
-  @ObjCSelector('createCameraWithName:settings:')
-  int create(String cameraName, PlatformMediaSettings settings);
+  @ObjCSelector('createCameraWithName:settings:stabilizationMode:')
+  int create(String cameraName, PlatformMediaSettings settings,
+      PlatformCameraStabilizationMode stabilizationMode);
 
   /// Initializes the camera with the given ID.
   @async

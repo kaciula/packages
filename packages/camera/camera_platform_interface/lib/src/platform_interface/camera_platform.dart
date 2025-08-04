@@ -51,6 +51,7 @@ abstract class CameraPlatform extends PlatformInterface {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
+    CameraStabilizationMode stabilizationMode = CameraStabilizationMode.off,
   }) {
     throw UnimplementedError('createCamera() is not implemented.');
   }
@@ -61,11 +62,13 @@ abstract class CameraPlatform extends PlatformInterface {
   Future<int> createCameraWithSettings(
     CameraDescription cameraDescription,
     MediaSettings mediaSettings,
+    CameraStabilizationMode stabilizationMode,
   ) {
     return createCamera(
       cameraDescription,
       mediaSettings.resolutionPreset,
       enableAudio: mediaSettings.enableAudio,
+      stabilizationMode: stabilizationMode,
     );
   }
 

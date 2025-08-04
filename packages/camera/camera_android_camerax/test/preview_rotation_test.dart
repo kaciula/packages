@@ -514,6 +514,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -568,6 +569,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -620,6 +622,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -672,6 +675,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -765,6 +769,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -818,6 +823,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -870,6 +876,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -923,6 +930,7 @@ void main() {
           await camera.createCameraWithSettings(
             availableCameras.first,
             testMediaSettings,
+            CameraStabilizationMode.off,
           );
 
           // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1012,6 +1020,7 @@ void main() {
         await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
 
         // Calculated according to: counterClockwiseCurrentDefaultDisplayRotation - cameraPreviewPreAppliedRotation,
@@ -1114,6 +1123,7 @@ void main() {
         await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
 
         // Calculated according to: counterClockwiseCurrentDefaultDisplayRotation - cameraPreviewPreAppliedRotation,
@@ -1230,6 +1240,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1291,6 +1302,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1352,6 +1364,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1413,6 +1426,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1517,6 +1531,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1576,6 +1591,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1639,6 +1655,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1700,6 +1717,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -1800,6 +1818,7 @@ void main() {
         await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
 
         // Calculated according to: ((270 - counterClockwiseDefaultDisplayRotation * 1 + 360) % 360) - 90.
@@ -1916,6 +1935,7 @@ void main() {
         await camera.createCameraWithSettings(
           availableCameras.first,
           testMediaSettings,
+          CameraStabilizationMode.off,
         );
 
         // Calculated according to: ((90 - 270 * 1 + 360) % 360) - cameraPreviewPreAppliedRotation.
@@ -2052,6 +2072,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -2111,6 +2132,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -2207,6 +2229,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve
@@ -2286,6 +2309,7 @@ void main() {
             await camera.createCameraWithSettings(
               availableCameras.first,
               testMediaSettings,
+              CameraStabilizationMode.off,
             );
 
             // Put camera preview in widget tree and pump one frame so that Future to retrieve

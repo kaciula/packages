@@ -35,15 +35,18 @@ void main() {
         // Act
         final int cameraId = await camera.createCameraWithSettings(
           const CameraDescription(
-              name: 'Test',
-              lensDirection: CameraLensDirection.back,
-              sensorOrientation: 0),
+            name: 'Test',
+            lensDirection: CameraLensDirection.back,
+            sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
+          ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
             fps: 15,
             videoBitrate: 200000,
             audioBitrate: 32000,
           ),
+          CameraStabilizationMode.off,
         );
 
         // Assert
@@ -84,6 +87,7 @@ void main() {
               name: 'Test',
               lensDirection: CameraLensDirection.back,
               sensorOrientation: 0,
+              availableStabilizationModes: <CameraStabilizationMode>[],
             ),
             const MediaSettings(
               resolutionPreset: ResolutionPreset.low,
@@ -92,6 +96,7 @@ void main() {
               audioBitrate: 32000,
               enableAudio: true,
             ),
+            CameraStabilizationMode.off,
           ),
           throwsA(
             isA<CameraException>()
@@ -124,6 +129,7 @@ void main() {
               name: 'Test',
               lensDirection: CameraLensDirection.back,
               sensorOrientation: 0,
+              availableStabilizationModes: <CameraStabilizationMode>[],
             ),
             const MediaSettings(
               resolutionPreset: ResolutionPreset.low,
@@ -132,6 +138,7 @@ void main() {
               audioBitrate: 32000,
               enableAudio: true,
             ),
+            CameraStabilizationMode.off,
           ),
           throwsA(
             isA<CameraException>()
@@ -192,6 +199,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -200,6 +208,7 @@ void main() {
             audioBitrate: 32000,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         );
 
         // Act
@@ -245,6 +254,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -253,6 +263,7 @@ void main() {
             audioBitrate: 32000,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         );
         final Future<void> initializeFuture = camera.initializeCamera(cameraId);
         camera.cameraEventStreamController.add(CameraInitializedEvent(
@@ -299,6 +310,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -307,6 +319,7 @@ void main() {
             audioBitrate: 32000,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         );
         final Future<void> initializeFuture = camera.initializeCamera(cameraId);
         camera.cameraEventStreamController.add(CameraInitializedEvent(
@@ -475,6 +488,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           const MediaSettings(
             resolutionPreset: ResolutionPreset.low,
@@ -483,6 +497,7 @@ void main() {
             audioBitrate: 32000,
             enableAudio: true,
           ),
+          CameraStabilizationMode.off,
         );
         final Future<void> initializeFuture = camera.initializeCamera(cameraId);
         camera.cameraEventStreamController.add(
@@ -535,6 +550,7 @@ void main() {
             lensDirection:
                 parseCameraLensDirection(typedData['lensFacing']! as String),
             sensorOrientation: typedData['sensorOrientation']! as int,
+            availableStabilizationModes: const <CameraStabilizationMode>[],
           );
           expect(cameras[i], cameraDescription);
         }
@@ -629,9 +645,11 @@ void main() {
 
         // Act
         const CameraDescription cameraDescription = CameraDescription(
-            name: 'Test',
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 0);
+          name: 'Test',
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        );
         await camera.setDescriptionWhileRecording(cameraDescription);
 
         // Assert

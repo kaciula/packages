@@ -125,6 +125,66 @@ public final class CameraPlugin: NSObject, FlutterPlugin {
 }
 
 extension CameraPlugin: FCPCameraApi {
+  private func mapStabilizationMode(_ mode: String) -> FCPPlatformCameraStabilizationMode {
+    switch mode {
+    case "off":
+      return .off
+    case "standard":
+      return .standard
+    case "cinematic":
+      return .cinematic
+    case "cinematicExtended":
+      return .cinematicExtended
+    case "previewOptimized":
+      return .previewOptimized
+    case "auto":
+      return .auto
+    default:
+      return .off
+    }
+  }
+
+  private func mapDeviceType(_ deviceType: AVCaptureDevice.DeviceType)
+    -> FCPPlatformAVCaptureDeviceType
+  {
+    if deviceType == .builtInWideAngleCamera {
+      return .builtInWideAngleCamera
+    } else if deviceType == .builtInTelephotoCamera {
+      return .builtInTelephotoCamera
+    } else if deviceType == .builtInDualCamera {
+      return .builtInDualCamera
+    } else if deviceType == .builtInTrueDepthCamera {
+      return .builtInTrueDepthCamera
+    }
+
+    if #available(iOS 13.0, *) {
+      if deviceType == .builtInUltraWideCamera {
+        return .builtInUltraWideCamera
+      } else if deviceType == .builtInDualWideCamera {
+        return .builtInDualWideCamera
+      } else if deviceType == .builtInTripleCamera {
+        return .builtInTripleCamera
+      }
+    }
+
+    if #available(iOS 15.4, *) {
+      if deviceType == .builtInLiDARDepthCamera {
+        return .builtInLiDARDepthCamera
+      }
+    }
+
+    if #available(iOS 17.0, *) {
+      if deviceType == .external {
+        return .external
+      } else if deviceType == .continuityCamera {
+        return .continuityCamera
+      }
+    }
+
+    // Default fallback
+    return .builtInDualCamera
+  }
+
   public func availableCameras(
     completion: @escaping ([FCPPlatformCameraDescription]?, FlutterError?) -> Void
   ) {
@@ -134,10 +194,23 @@ extension CameraPlugin: FCPCameraApi {
       var discoveryDevices: [AVCaptureDevice.DeviceType] = [
         .builtInWideAngleCamera,
         .builtInTelephotoCamera,
+        .builtInDualCamera,
+        .builtInTrueDepthCamera,
       ]
 
       if #available(iOS 13.0, *) {
         discoveryDevices.append(.builtInUltraWideCamera)
+        discoveryDevices.append(.builtInDualWideCamera)
+        discoveryDevices.append(.builtInTripleCamera)
+      }
+
+      if #available(iOS 15.4, *) {
+        discoveryDevices.append(.builtInLiDARDepthCamera)
+      }
+
+      if #available(iOS 17.0, *) {
+        discoveryDevices.append(.external)
+        discoveryDevices.append(.continuityCamera)
       }
 
       let devices = strongSelf.deviceDiscoverer.discoverySession(
@@ -161,9 +234,28 @@ extension CameraPlugin: FCPCameraApi {
           lensFacing = .external
         }
 
+        // Determine available stabilization modes based on iOS version
+        let availableStabilizationModes: [String]
+        if #available(iOS 17.0, *) {
+          availableStabilizationModes = [
+            "off", "standard", "cinematic", "cinematicExtended", "previewOptimized", "auto",
+          ]
+        } else {
+          availableStabilizationModes = [
+            "off", "standard", "cinematic", "cinematicExtended", "auto",
+          ]
+        }
+
+        // Convert string array to FCPPlatformCameraStabilizationModeBox array
+        let stabilizationModeBoxes = availableStabilizationModes.map { mode in
+          FCPPlatformCameraStabilizationModeBox(value: strongSelf.mapStabilizationMode(mode))
+        }
+
         let cameraDescription = FCPPlatformCameraDescription.make(
           withName: device.uniqueID,
-          lensDirection: lensFacing
+          lensDirection: lensFacing,
+          availableStabilizationModes: stabilizationModeBoxes,
+          captureDeviceType: strongSelf.mapDeviceType(device.device.deviceType)
         )
         reply.append(cameraDescription)
       }
@@ -175,6 +267,7 @@ extension CameraPlugin: FCPCameraApi {
   public func createCamera(
     withName cameraName: String,
     settings: FCPPlatformMediaSettings,
+    stabilizationMode: FCPPlatformCameraStabilizationMode,
     completion: @escaping (NSNumber?, FlutterError?) -> Void
   ) {
     // Create FLTCam only if granted camera access (and audio access if audio is enabled)
@@ -204,12 +297,14 @@ extension CameraPlugin: FCPCameraApi {
             strongSelf.createCameraOnSessionQueue(
               withName: cameraName,
               settings: settings,
+              stabilizationMode: stabilizationMode,
               completion: completion)
           }
         } else {
           strongSelf.createCameraOnSessionQueue(
             withName: cameraName,
             settings: settings,
+            stabilizationMode: stabilizationMode,
             completion: completion)
         }
       }
@@ -219,10 +314,40 @@ extension CameraPlugin: FCPCameraApi {
   func createCameraOnSessionQueue(
     withName: String,
     settings: FCPPlatformMediaSettings,
+    stabilizationMode: FCPPlatformCameraStabilizationMode,
     completion: @escaping (NSNumber?, FlutterError?) -> Void
   ) {
     captureSessionQueue.async { [weak self] in
-      self?.sessionQueueCreateCamera(name: withName, settings: settings, completion: completion)
+      self?.sessionQueueCreateCamera(
+        name: withName,
+        settings: settings,
+        stabilizationMode: stabilizationMode,
+        completion: completion)
+    }
+  }
+
+  private func convertToAVStabilizationMode(_ mode: FCPPlatformCameraStabilizationMode)
+    -> AVCaptureVideoStabilizationMode
+  {
+    switch mode {
+    case .off:
+      return .off
+    case .standard:
+      return .standard
+    case .cinematic:
+      return .cinematic
+    case .cinematicExtended:
+      return .cinematicExtended
+    case .previewOptimized:
+      if #available(iOS 17.0, *) {
+        return .previewOptimized
+      } else {
+        return .standard
+      }
+    case .auto:
+      return .auto
+    default:
+      return .off
     }
   }
 
@@ -231,6 +356,7 @@ extension CameraPlugin: FCPCameraApi {
   private func sessionQueueCreateCamera(
     name: String,
     settings: FCPPlatformMediaSettings,
+    stabilizationMode: FCPPlatformCameraStabilizationMode,
     completion: @escaping (NSNumber?, FlutterError?) -> Void
   ) {
     let mediaSettingsAVWrapper = FLTCamMediaSettingsAVWrapper()
@@ -245,7 +371,8 @@ extension CameraPlugin: FCPCameraApi {
       captureSessionFactory: captureSessionFactory,
       captureSessionQueue: captureSessionQueue,
       captureDeviceInputFactory: captureDeviceInputFactory,
-      initialCameraName: name
+      initialCameraName: name,
+      videoStabilizationMode: convertToAVStabilizationMode(stabilizationMode)
     )
 
     var error: NSError?

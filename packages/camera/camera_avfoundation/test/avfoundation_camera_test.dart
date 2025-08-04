@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:async/async.dart';
+import 'package:camera_avfoundation/camera_avfoundation.dart';
 import 'package:camera_avfoundation/src/avfoundation_camera.dart';
 import 'package:camera_avfoundation/src/messages.g.dart';
 import 'package:camera_avfoundation/src/utils.dart';
@@ -38,9 +39,11 @@ void main() {
       // Act
       final int cameraId = await camera.createCamera(
         const CameraDescription(
-            name: cameraName,
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 0),
+          name: cameraName,
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         ResolutionPreset.high,
       );
 
@@ -70,9 +73,11 @@ void main() {
       // Act
       final int cameraId = await camera.createCameraWithSettings(
         const CameraDescription(
-            name: cameraName,
-            lensDirection: CameraLensDirection.back,
-            sensorOrientation: 0),
+          name: cameraName,
+          lensDirection: CameraLensDirection.back,
+          sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
+        ),
         const MediaSettings(
           resolutionPreset: ResolutionPreset.low,
           fps: fps,
@@ -80,6 +85,7 @@ void main() {
           audioBitrate: audioBitrate,
           enableAudio: true,
         ),
+        CameraStabilizationMode.off,
       );
 
       // Assert
@@ -115,6 +121,7 @@ void main() {
             name: 'Test',
             lensDirection: CameraLensDirection.back,
             sensorOrientation: 0,
+            availableStabilizationModes: <CameraStabilizationMode>[],
           ),
           ResolutionPreset.high,
         ),
@@ -167,6 +174,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -201,6 +209,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -238,6 +247,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -349,6 +359,7 @@ void main() {
           name: 'Test',
           lensDirection: CameraLensDirection.back,
           sensorOrientation: 0,
+          availableStabilizationModes: <CameraStabilizationMode>[],
         ),
         ResolutionPreset.high,
       );
@@ -372,9 +383,17 @@ void main() {
       final List<PlatformCameraDescription> returnData =
           <PlatformCameraDescription>[
         PlatformCameraDescription(
-            name: 'Test 1', lensDirection: PlatformCameraLensDirection.front),
+          name: 'Test 1',
+          lensDirection: PlatformCameraLensDirection.front,
+          availableStabilizationModes: <PlatformCameraStabilizationMode>[],
+          captureDeviceType: PlatformAVCaptureDeviceType.builtInDualCamera,
+        ),
         PlatformCameraDescription(
-            name: 'Test 2', lensDirection: PlatformCameraLensDirection.back),
+          name: 'Test 2',
+          lensDirection: PlatformCameraLensDirection.back,
+          availableStabilizationModes: <PlatformCameraStabilizationMode>[],
+          captureDeviceType: PlatformAVCaptureDeviceType.builtInDualCamera,
+        ),
       ];
       when(mockApi.getAvailableCameras()).thenAnswer((_) async => returnData);
 
@@ -462,9 +481,11 @@ void main() {
 
     test('Should set the description while recording', () async {
       const CameraDescription camera2Description = CameraDescription(
-          name: 'Test2',
-          lensDirection: CameraLensDirection.front,
-          sensorOrientation: 0);
+        name: 'Test2',
+        lensDirection: CameraLensDirection.front,
+        sensorOrientation: 0,
+        availableStabilizationModes: <CameraStabilizationMode>[],
+      );
 
       await camera.setDescriptionWhileRecording(camera2Description);
 
