@@ -19,11 +19,61 @@ analyzer:
     # `dart analyze` hasn't recognized the @example directive yet.
     # Remove it once https://github.com/dart-lang/sdk/pull/63646 is landed.
     doc_directive_unknown: ignore
+    todo: ignore
   exclude: # DIFFERENT FROM FLUTTER/FLUTTER
     # Ignore generated files
     - '**/*.pb.dart'
     - '**/*.g.dart'
     - '**/*.mocks.dart' # Mockito @GenerateMocks
+    # Upstream fork directories unused in protern-camera. Only packages/camera/**
+    # is actively maintained here; the rest stay on disk to ease future
+    # upstream syncs but should not produce diagnostics.
+    - 'script/**'
+    - 'third_party/**'
+    # Unused camera platform implementations (Protern Video uses the
+    # camerax/avfoundation/windows implementations, not these).
+    - 'packages/camera/camera_android/**'
+    - 'packages/camera/camera_web/**'
+    - 'packages/animations/**'
+    - 'packages/cross_file/**'
+    - 'packages/cupertino_ui/**'
+    - 'packages/e2e/**'
+    - 'packages/espresso/**'
+    - 'packages/extension_google_sign_in_as_googleapis_auth/**'
+    - 'packages/file_selector/**'
+    - 'packages/flutter_lints/**'
+    - 'packages/flutter_plugin_android_lifecycle/**'
+    - 'packages/go_router/**'
+    - 'packages/go_router_builder/**'
+    - 'packages/google_adsense/**'
+    - 'packages/google_fonts/**'
+    - 'packages/google_identity_services_web/**'
+    - 'packages/google_maps_flutter/**'
+    - 'packages/google_sign_in/**'
+    - 'packages/image_picker/**'
+    - 'packages/in_app_purchase/**'
+    - 'packages/integration_test/**'
+    - 'packages/interactive_media_ads/**'
+    - 'packages/local_auth/**'
+    - 'packages/material_ui/**'
+    - 'packages/metrics_center/**'
+    - 'packages/path_provider/**'
+    - 'packages/pigeon/**'
+    - 'packages/platform/**'
+    - 'packages/plugin_platform_interface/**'
+    - 'packages/pointer_interceptor/**'
+    - 'packages/quick_actions/**'
+    - 'packages/rfw/**'
+    - 'packages/shared_preferences/**'
+    - 'packages/two_dimensional_scrollables/**'
+    - 'packages/url_launcher/**'
+    - 'packages/vector_graphics/**'
+    - 'packages/vector_graphics_codec/**'
+    - 'packages/vector_graphics_compiler/**'
+    - 'packages/video_player/**'
+    - 'packages/web_benchmarks/**'
+    - 'packages/webview_flutter/**'
+    - 'packages/xdg_directories/**'
 
 formatter:
   page_width: 100
