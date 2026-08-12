@@ -82,6 +82,9 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
     implementation("androidx.camera:camera-video:${cameraxVersion}")
     implementation("com.google.guava:guava:33.5.0-android")
+    // javac needs this on the compile classpath to load camera-core's
+    // SurfaceRequest type annotations; camera-core only exposes it at runtime.
+    compileOnly("androidx.concurrent:concurrent-futures:1.1.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.23.0")
     testImplementation("org.mockito:mockito-inline:5.2.0")
