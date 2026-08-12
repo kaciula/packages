@@ -17,7 +17,7 @@ import 'surface_texture_rotated_preview.dart';
 /// uses an Impeller backend that handles crop and rotation of Surfaces
 /// correctly automatically.
 @internal
-final class RotatedPreviewDelegate extends StatelessWidget {
+final class RotatedPreviewDelegate extends StatefulWidget {
   /// Creates [RotatedPreviewDelegate] that will build the correctly
   /// rotated preview widget depending on whether or not the Impeller
   /// backend handles crop and rotation automatically.
@@ -30,6 +30,8 @@ final class RotatedPreviewDelegate extends StatelessWidget {
     required this.sensorOrientationDegrees,
     required this.cameraIsFrontFacing,
     required this.deviceOrientationManager,
+    required this.initialHasCameraTransform,
+    required this.hasCameraTransformStream,
     required this.child,
   });
 
@@ -59,38 +61,82 @@ final class RotatedPreviewDelegate extends StatelessWidget {
   /// Instance required to check the current rotation of the default Android display.
   final DeviceOrientationManager deviceOrientationManager;
 
+  /// Whether frames currently delivered to the preview surface still carry the
+  /// camera sensor transform.
+  final bool initialHasCameraTransform;
+
+  /// Stream of changes to whether preview frames carry the camera sensor
+  /// transform.
+  ///
+  /// CameraX reports false when it delivers pre-transformed frames, e.g. via
+  /// stream sharing when the bound use case combination exceeds the device's
+  /// supported surface combinations, which can change as use cases are bound
+  /// and unbound (like a video recording starting and stopping).
+  final Stream<bool> hasCameraTransformStream;
+
   /// The camera preview [Widget] to rotate.
   final Widget child;
 
   @override
+  State<RotatedPreviewDelegate> createState() => _RotatedPreviewDelegateState();
+}
+
+final class _RotatedPreviewDelegateState extends State<RotatedPreviewDelegate> {
+  late bool _hasCameraTransform;
+  late final StreamSubscription<bool> _hasCameraTransformSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _hasCameraTransform = widget.initialHasCameraTransform;
+    _hasCameraTransformSubscription = widget.hasCameraTransformStream.listen((
+      bool hasCameraTransform,
+    ) {
+      setState(() {
+        _hasCameraTransform = hasCameraTransform;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    unawaited(_hasCameraTransformSubscription.cancel());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (handlesCropAndRotation) {
+    // Pre-transformed frames (no camera transform) are already upright with
+    // respect to the display, so sensor orientation compensation must be
+    // skipped and only disagreement between the user interface orientation
+    // and the display rotation needs correcting.
+    if (widget.handlesCropAndRotation || !_hasCameraTransform) {
       return SurfaceTextureRotatedPreview(
-        initialDeviceOrientation,
-        initialDefaultDisplayRotation,
-        deviceOrientationStream,
-        deviceOrientationManager,
-        child: child,
+        widget.initialDeviceOrientation,
+        widget.initialDefaultDisplayRotation,
+        widget.deviceOrientationStream,
+        widget.deviceOrientationManager,
+        child: widget.child,
       );
     }
 
-    if (cameraIsFrontFacing) {
+    if (widget.cameraIsFrontFacing) {
       return ImageReaderRotatedPreview.frontFacingCamera(
-        initialDeviceOrientation,
-        initialDefaultDisplayRotation,
-        deviceOrientationStream,
-        sensorOrientationDegrees,
-        deviceOrientationManager,
-        child: child,
+        widget.initialDeviceOrientation,
+        widget.initialDefaultDisplayRotation,
+        widget.deviceOrientationStream,
+        widget.sensorOrientationDegrees,
+        widget.deviceOrientationManager,
+        child: widget.child,
       );
     } else {
       return ImageReaderRotatedPreview.backFacingCamera(
-        initialDeviceOrientation,
-        initialDefaultDisplayRotation,
-        deviceOrientationStream,
-        sensorOrientationDegrees,
-        deviceOrientationManager,
-        child: child,
+        widget.initialDeviceOrientation,
+        widget.initialDefaultDisplayRotation,
+        widget.deviceOrientationStream,
+        widget.sensorOrientationDegrees,
+        widget.deviceOrientationManager,
+        child: widget.child,
       );
     }
   }

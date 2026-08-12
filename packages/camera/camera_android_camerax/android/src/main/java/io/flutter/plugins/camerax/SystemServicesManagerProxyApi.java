@@ -54,6 +54,32 @@ public class SystemServicesManagerProxyApi extends PigeonApiSystemServicesManage
               });
     }
 
+    @Override
+    public void onPreviewTransformationInfoChanged(
+        int rotationDegrees, boolean hasCameraTransform, @NonNull Runnable onHandled) {
+      api.getPigeonRegistrar()
+          .runOnMainThread(
+              new ProxyApiRegistrar.FlutterMethodRunnable() {
+                @Override
+                public void run() {
+                  api.onPreviewTransformationInfoChanged(
+                      SystemServicesManagerImpl.this,
+                      rotationDegrees,
+                      hasCameraTransform,
+                      ResultCompat.asCompatCallback(
+                          result -> {
+                            if (result.isFailure()) {
+                              onFailure(
+                                  "SystemServicesManager.onPreviewTransformationInfoChanged",
+                                  Objects.requireNonNull(result.exceptionOrNull()));
+                            }
+                            onHandled.run();
+                            return null;
+                          }));
+                }
+              });
+    }
+
     @NonNull
     @Override
     Context getContext() {

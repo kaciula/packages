@@ -344,6 +344,12 @@ abstract class SystemServicesManager {
 
   late void Function(String errorDescription) onCameraError;
 
+  /// Called when the transformation info of the preview `SurfaceRequest`
+  /// changes (e.g. CameraX engages stream sharing, which delivers frames that
+  /// no longer carry the camera sensor transform).
+  late void Function(int rotationDegrees, bool hasCameraTransform)
+  onPreviewTransformationInfoChanged;
+
   @async
   CameraPermissionsError? requestCameraPermissions(bool enableAudio);
 

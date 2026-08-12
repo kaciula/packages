@@ -169,4 +169,18 @@ public class SystemServicesTest {
 
     verify(mockApi).onCameraError(eq(instance), eq(errorDescription), any());
   }
+
+  @Test
+  public void onPreviewTransformationInfoChanged() {
+    final SystemServicesManagerProxyApi mockApi = mock(SystemServicesManagerProxyApi.class);
+    when(mockApi.getPigeonRegistrar()).thenReturn(new TestProxyApiRegistrar());
+
+    final SystemServicesManager instance =
+        new SystemServicesManagerProxyApi.SystemServicesManagerImpl(mockApi);
+    final Runnable onHandled = mock(Runnable.class);
+    instance.onPreviewTransformationInfoChanged(90, false, onHandled);
+
+    verify(mockApi)
+        .onPreviewTransformationInfoChanged(eq(instance), eq(90L), eq(false), any());
+  }
 }

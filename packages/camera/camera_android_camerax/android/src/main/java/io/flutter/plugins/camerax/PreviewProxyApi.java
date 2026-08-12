@@ -20,6 +20,7 @@ import io.flutter.view.TextureRegistry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * ProxyApi implementation for {@link Preview}. This class may handle instantiating native object
@@ -137,32 +138,59 @@ class PreviewProxyApi extends PigeonApiPreview {
             }
           });
 
-      // Provide surface.
       surfaceProducer.setSize(
           request.getResolution().getWidth(), request.getResolution().getHeight());
-      Surface flutterSurface = surfaceProducer.getForcedNewSurface();
-      request.provideSurface(
-          flutterSurface,
-          Executors.newSingleThreadExecutor(),
-          (result) -> {
-            // See
-            // https://developer.android.com/reference/androidx/camera/core/SurfaceRequest.Result
-            // for documentation.
-            // Always attempt a release.
-            flutterSurface.release();
-            int resultCode = result.getResultCode();
-            switch (resultCode) {
-              case SurfaceRequest.Result.RESULT_REQUEST_CANCELLED:
-              case SurfaceRequest.Result.RESULT_WILL_NOT_PROVIDE_SURFACE:
-              case SurfaceRequest.Result.RESULT_SURFACE_ALREADY_PROVIDED:
-              case SurfaceRequest.Result.RESULT_SURFACE_USED_SUCCESSFULLY:
-                // Only need to release, do nothing.
-                break;
-              case SurfaceRequest.Result.RESULT_INVALID_SURFACE: // Intentional fall through.
-              default:
-                systemServicesManager.onCameraError(getProvideSurfaceErrorDescription(resultCode));
+      final Surface flutterSurface = surfaceProducer.getForcedNewSurface();
+      final AtomicBoolean surfaceProvided = new AtomicBoolean(false);
+      final Runnable provideSurface =
+          () -> {
+            if (!surfaceProvided.compareAndSet(false, true)) {
+              return;
             }
-          });
+            request.provideSurface(
+                flutterSurface,
+                Executors.newSingleThreadExecutor(),
+                (result) -> {
+                  // See
+                  // https://developer.android.com/reference/androidx/camera/core/SurfaceRequest.Result
+                  // for documentation.
+                  // Always attempt a release.
+                  flutterSurface.release();
+                  int resultCode = result.getResultCode();
+                  switch (resultCode) {
+                    case SurfaceRequest.Result.RESULT_REQUEST_CANCELLED:
+                    case SurfaceRequest.Result.RESULT_WILL_NOT_PROVIDE_SURFACE:
+                    case SurfaceRequest.Result.RESULT_SURFACE_ALREADY_PROVIDED:
+                    case SurfaceRequest.Result.RESULT_SURFACE_USED_SUCCESSFULLY:
+                      // Only need to release, do nothing.
+                      break;
+                    case SurfaceRequest.Result.RESULT_INVALID_SURFACE: // Intentional fall through.
+                    default:
+                      systemServicesManager.onCameraError(
+                          getProvideSurfaceErrorDescription(resultCode));
+                  }
+                });
+          };
+
+      // Forward transformation info updates to Dart so the preview widget can
+      // compensate correctly. Notably, when CameraX engages stream sharing
+      // (e.g. binding Preview + VideoCapture + ImageAnalysis on devices that
+      // cannot stream all three concurrently), frames are pre-rotated by an
+      // OpenGL pipeline and no longer carry the camera sensor transform, which
+      // is reported here via hasCameraTransform=false.
+      //
+      // The surface is provided only after Dart has applied the first
+      // transformation info of this request. CameraX cannot deliver frames
+      // into a session before its surface is provided, so frames of a new
+      // session (e.g. stream sharing engaging when a recording starts) can
+      // never be rendered with the previous session's rotation compensation.
+      request.setTransformationInfoListener(
+          Executors.newSingleThreadExecutor(),
+          transformationInfo ->
+              systemServicesManager.onPreviewTransformationInfoChanged(
+                  transformationInfo.getRotationDegrees(),
+                  transformationInfo.hasCameraTransform(),
+                  provideSurface));
     };
   }
 

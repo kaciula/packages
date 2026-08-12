@@ -161,7 +161,11 @@ void main() {
       return Observer<T>.detached(onChanged: onChanged);
     };
     PigeonOverrides.systemServicesManager_new =
-        ({required void Function(SystemServicesManager, String) onCameraError}) {
+        ({
+          required void Function(SystemServicesManager, String) onCameraError,
+          required void Function(SystemServicesManager, int, bool)
+          onPreviewTransformationInfoChanged,
+        }) {
           return MockSystemServicesManager();
         };
     PigeonOverrides.deviceOrientationManager_new =
@@ -2010,6 +2014,89 @@ void main() {
             );
           },
         );
+      },
+    );
+  });
+
+  group('when preview frames lose the camera transform,', () {
+    testWidgets(
+      'sensor orientation compensation is skipped while hasCameraTransform is false and restored when it is true again',
+      (WidgetTester tester) async {
+        final camera = AndroidCameraCameraX();
+        const cameraId = 537;
+
+        // Set up test to use back camera with sensor orientation degrees 90,
+        // tell camera that handlesCropAndRotation is false, set camera initial
+        // device orientation to portrait up and initial default display
+        // rotation to 0.
+        final mockBackCameraSelector = MockCameraSelector();
+        final MockProcessCameraProvider mockProcessCameraProvider =
+            setUpMockCameraSelectorAndMockProcessCameraProviderForSelectingTestCamera(
+              mockCameraSelector: mockBackCameraSelector,
+              sensorRotationDegrees: 90,
+              isCameraFrontFacing: false,
+            );
+        setUpOverridesForCreatingTestCamera(
+          mockProcessCameraProvider: mockProcessCameraProvider,
+          createCameraSelector: createCameraSelectorForBackCamera(mockBackCameraSelector),
+          getDefaultDisplayRotation: () => Future<int>.value(Surface.rotation0),
+          handlesCropAndRotation: false,
+          getUiOrientation: () async => _serializeDeviceOrientation(DeviceOrientation.portraitUp),
+        );
+
+        // Capture the transformation info callback that the camera wires into
+        // its SystemServicesManager so the test can emulate the native side
+        // reporting transformation info changes.
+        late void Function(SystemServicesManager, int, bool)
+        capturedOnPreviewTransformationInfoChanged;
+        PigeonOverrides.systemServicesManager_new =
+            ({
+              required void Function(SystemServicesManager, String) onCameraError,
+              required void Function(SystemServicesManager, int, bool)
+              onPreviewTransformationInfoChanged,
+            }) {
+              capturedOnPreviewTransformationInfoChanged = onPreviewTransformationInfoChanged;
+              return MockSystemServicesManager();
+            };
+
+        // Get and create test back camera.
+        final List<CameraDescription> availableCameras = await camera.availableCameras();
+        expect(availableCameras.length, 1);
+        final int flutterSurfaceTextureId = await camera.createCameraWithSettings(
+          availableCameras.first,
+          const MediaSettings(),
+          CameraStabilizationMode.off,
+        );
+        await camera.initializeCamera(flutterSurfaceTextureId);
+
+        // Put camera preview in widget tree and pump one frame so that Future to retrieve
+        // the initial default display rotation completes.
+        await tester.pumpWidget(camera.buildPreview(cameraId));
+        await tester.pump();
+
+        // While frames carry the camera transform, sensor orientation
+        // compensation applies: (90 - 0 + 360) % 360 = 90 degrees.
+        RotatedBox rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));
+        expect((rotatedBox.quarterTurns + 4) % 4, _90DegreesClockwise);
+
+        // Frames arrive pre-transformed, e.g. CameraX engaged stream sharing
+        // because starting a video recording bound more use cases than the
+        // device supports concurrently. Sensor orientation compensation must
+        // be skipped; only the user interface orientation (portrait up) vs
+        // default display rotation (0) disagreement remains, which is 0.
+        capturedOnPreviewTransformationInfoChanged(camera.systemServicesManager, 0, false);
+        await tester.pumpAndSettle();
+
+        rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));
+        expect((rotatedBox.quarterTurns + 4) % 4, _0DegreesClockwise);
+
+        // Frames carry the camera transform again, e.g. the recording stopped
+        // and stream sharing disengaged.
+        capturedOnPreviewTransformationInfoChanged(camera.systemServicesManager, 90, true);
+        await tester.pumpAndSettle();
+
+        rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));
+        expect((rotatedBox.quarterTurns + 4) % 4, _90DegreesClockwise);
       },
     );
   });

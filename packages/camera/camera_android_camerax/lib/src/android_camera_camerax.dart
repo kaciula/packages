@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:math' show Point;
+import 'dart:math' show Point, max, min;
 
 import 'package:async/async.dart';
 import 'package:camera_platform_interface/camera_platform_interface.dart';
@@ -75,7 +75,31 @@ class AndroidCameraCameraX extends CameraPlatform {
     onCameraError: (_, String errorDescription) {
       cameraErrorStreamController.add(errorDescription);
     },
+    onPreviewTransformationInfoChanged: (_, int rotationDegrees, bool hasCameraTransform) {
+      _previewHasCameraTransform = hasCameraTransform;
+      _previewHasCameraTransformStreamController.add(hasCameraTransform);
+    },
   );
+
+  /// Whether [videoCapture] was bound together with the other use cases when
+  /// the camera was created.
+  ///
+  /// When true, video recording start/stop must not bind or unbind use cases,
+  /// keeping the camera session configuration stable for the whole camera
+  /// lifetime.
+  bool _videoCaptureEagerlyBound = false;
+
+  /// Whether frames delivered to the preview surface still carry the camera
+  /// sensor transform.
+  ///
+  /// CameraX reports false when it delivers pre-transformed frames, e.g. via
+  /// stream sharing when the bound use case combination exceeds the device's
+  /// supported surface combinations. In that case the preview widget must not
+  /// apply sensor orientation compensation.
+  bool _previewHasCameraTransform = true;
+
+  final StreamController<bool> _previewHasCameraTransformStreamController =
+      StreamController<bool>.broadcast();
 
   /// Handles retrieving media orientation for a device.
   late final DeviceOrientationManager deviceOrientationManager = DeviceOrientationManager(
@@ -477,13 +501,32 @@ class AndroidCameraCameraX extends CameraPlatform {
     );
 
     // Bind configured UseCases to ProcessCameraProvider instance & mark Preview
-    // instance as bound but not paused. Video capture is bound at first use
-    // instead of here.
-    camera = await processCameraProvider!.bindToLifecycle(cameraSelector!, <UseCase>[
-      preview!,
-      imageCapture!,
-      imageAnalysis!,
-    ]);
+    // instance as bound but not paused.
+    //
+    // Video capture is preferably bound up front: binding it lazily at first
+    // use reconfigures the camera session mid-preview (possibly engaging or
+    // disengaging stream sharing), which visibly disrupts the preview because
+    // the frame source and its rotation compensation cannot change in the same
+    // instant. With all use cases bound for the whole camera session, the
+    // session configuration never changes and starting a recording only
+    // starts the encoder. Devices that cannot bind the full combination fall
+    // back to binding video capture at first use, as before.
+    try {
+      camera = await processCameraProvider!.bindToLifecycle(cameraSelector!, <UseCase>[
+        preview!,
+        imageCapture!,
+        imageAnalysis!,
+        videoCapture!,
+      ]);
+      _videoCaptureEagerlyBound = true;
+    } on PlatformException {
+      _videoCaptureEagerlyBound = false;
+      camera = await processCameraProvider!.bindToLifecycle(cameraSelector!, <UseCase>[
+        preview!,
+        imageCapture!,
+        imageAnalysis!,
+      ]);
+    }
     await _updateCameraInfoAndLiveCameraState(_flutterSurfaceTextureId);
     previewInitiallyBound = true;
     _previewIsPaused = false;
@@ -491,8 +534,17 @@ class AndroidCameraCameraX extends CameraPlatform {
     // Configure CameraInitializedEvent to send as representation of a
     // configured camera:
 
-    // Retrieve preview resolution.
+    // Retrieve preview resolution. The app-facing camera package expects the
+    // preview size in the camera sensor's coordinate system, whose long edge
+    // is horizontal on phones; it derives the portrait aspect ratio itself.
+    // When CameraX shares the camera streams between use cases (bound up
+    // front above), the reported resolution is display-oriented instead, so
+    // normalize a portrait-shaped resolution back to that convention.
     final ResolutionInfo previewResolutionInfo = (await preview!.getResolutionInfo())!;
+    final int previewResolutionWidth = previewResolutionInfo.resolution.width;
+    final int previewResolutionHeight = previewResolutionInfo.resolution.height;
+    final int sensorOrientedPreviewWidth = max(previewResolutionWidth, previewResolutionHeight);
+    final int sensorOrientedPreviewHeight = min(previewResolutionWidth, previewResolutionHeight);
 
     // Mark auto-focus, auto-exposure and setting points for focus & exposure
     // as available operations as CameraX does its best across devices to
@@ -505,8 +557,8 @@ class AndroidCameraCameraX extends CameraPlatform {
     cameraEventStreamController.add(
       CameraInitializedEvent(
         cameraId,
-        previewResolutionInfo.resolution.width.toDouble(),
-        previewResolutionInfo.resolution.height.toDouble(),
+        sensorOrientedPreviewWidth.toDouble(),
+        sensorOrientedPreviewHeight.toDouble(),
         exposureMode,
         exposurePointSupported,
         focusMode,
@@ -1015,6 +1067,8 @@ class AndroidCameraCameraX extends CameraPlatform {
       sensorOrientationDegrees: sensorOrientationDegrees,
       cameraIsFrontFacing: cameraIsFrontFacing,
       deviceOrientationManager: deviceOrientationManager,
+      initialHasCameraTransform: _previewHasCameraTransform,
+      hasCameraTransformStream: _previewHasCameraTransformStreamController.stream,
       child: preview,
     );
   }
@@ -1143,10 +1197,14 @@ class AndroidCameraCameraX extends CameraPlatform {
       return;
     }
     final dynamic Function(CameraImageData)? streamCallback = options.streamCallback;
-    if (streamCallback == null) {
+    if (streamCallback == null && !_videoCaptureEagerlyBound) {
       // For potential performance improvements, unbind imageAnalysis if not in use.
       // See https://developer.android.com/media/camera/camerax/architecture#combine-use-cases
       // for details.
+      //
+      // Skipped when all use cases were bound up front: changing the bound use
+      // cases mid-preview reconfigures the camera session, which visibly
+      // disrupts the preview.
       await _unbindUseCaseFromLifecycle(imageAnalysis!);
     }
 
@@ -1154,7 +1212,15 @@ class AndroidCameraCameraX extends CameraPlatform {
 
     // Set target rotation to default CameraX rotation only if capture
     // orientation not locked.
-    if (!captureOrientationLocked && shouldSetDefaultRotation) {
+    //
+    // Also required whenever video capture was bound at camera creation: a
+    // use case's target rotation defaults to the display rotation at bind
+    // time, so a lazily bound video capture inherited the recording
+    // orientation at every recording start, while an eagerly bound one is
+    // stuck with the display rotation at camera creation. Refreshing the
+    // target rotation only updates rotation metadata; it does not
+    // reconfigure the camera session.
+    if (!captureOrientationLocked && (shouldSetDefaultRotation || _videoCaptureEagerlyBound)) {
       await videoCapture!.setTargetRotation(
         await deviceOrientationManager.getDefaultDisplayRotation(),
       );
@@ -1223,7 +1289,9 @@ class AndroidCameraCameraX extends CameraPlatform {
       );
     }
 
-    await _unbindUseCaseFromLifecycle(videoCapture!);
+    if (!_videoCaptureEagerlyBound) {
+      await _unbindUseCaseFromLifecycle(videoCapture!);
+    }
     final videoFile = XFile(videoOutputPath!);
     cameraEventStreamController.add(VideoRecordedEvent(cameraId, videoFile, /* duration */ null));
     return videoFile;

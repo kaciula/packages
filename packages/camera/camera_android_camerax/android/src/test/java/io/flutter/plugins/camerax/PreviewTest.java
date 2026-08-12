@@ -5,10 +5,16 @@
 package io.flutter.plugins.camerax;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -187,8 +193,41 @@ public class PreviewTest {
     previewSurfaceProvider.onSurfaceRequested(mockSurfaceRequest);
 
     verify(mockSurfaceProducer).setSize(resolutionWidth, resolutionHeight);
+
+    // The surface must not be provided until Dart has handled the first transformation info
+    // update of this request; otherwise frames of a new camera session could render before the
+    // preview widget has applied the matching rotation compensation.
+    verify(mockSurfaceRequest, never()).provideSurface(any(), any(Executor.class), any());
+
+    final ArgumentCaptor<SurfaceRequest.TransformationInfoListener>
+        transformationInfoListenerCaptor =
+            ArgumentCaptor.forClass(SurfaceRequest.TransformationInfoListener.class);
+    verify(mockSurfaceRequest)
+        .setTransformationInfoListener(
+            any(Executor.class), transformationInfoListenerCaptor.capture());
+
+    doAnswer(
+            invocation -> {
+              ((Runnable) invocation.getArgument(2)).run();
+              return null;
+            })
+        .when(mockSystemServicesManager)
+        .onPreviewTransformationInfoChanged(anyInt(), anyBoolean(), any(Runnable.class));
+
+    final SurfaceRequest.TransformationInfo mockTransformationInfo =
+        mock(SurfaceRequest.TransformationInfo.class);
+    when(mockTransformationInfo.getRotationDegrees()).thenReturn(90);
+    when(mockTransformationInfo.hasCameraTransform()).thenReturn(false);
+    transformationInfoListenerCaptor.getValue().onTransformationInfoUpdate(mockTransformationInfo);
+
+    verify(mockSystemServicesManager)
+        .onPreviewTransformationInfoChanged(eq(90), eq(false), any(Runnable.class));
     verify(mockSurfaceRequest)
         .provideSurface(surfaceCaptor.capture(), any(Executor.class), consumerCaptor.capture());
+
+    // Later transformation info updates are forwarded but must not provide the surface again.
+    transformationInfoListenerCaptor.getValue().onTransformationInfoUpdate(mockTransformationInfo);
+    verify(mockSurfaceRequest, times(1)).provideSurface(any(), any(Executor.class), any());
 
     // Test that the surface derived from the surface texture entry will be provided to the surface
     // request.

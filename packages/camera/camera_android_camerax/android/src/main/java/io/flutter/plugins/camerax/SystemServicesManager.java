@@ -26,6 +26,16 @@ public abstract class SystemServicesManager {
 
   abstract void onCameraError(@NonNull String description);
 
+  /**
+   * Forwards preview transformation info to Dart.
+   *
+   * <p>{@code onHandled} runs once Dart has handled the update (or the update could not be
+   * delivered), allowing callers to sequence work that must not happen before the preview widget
+   * has applied the transformation info.
+   */
+  abstract void onPreviewTransformationInfoChanged(
+      int rotationDegrees, boolean hasCameraTransform, @NonNull Runnable onHandled);
+
   @NonNull
   abstract Context getContext();
 

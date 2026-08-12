@@ -79,6 +79,12 @@ class PigeonOverrides {
   static SystemServicesManager Function({
     required void Function(SystemServicesManager pigeon_instance, String errorDescription)
     onCameraError,
+    required void Function(
+      SystemServicesManager pigeon_instance,
+      int rotationDegrees,
+      bool hasCameraTransform,
+    )
+    onPreviewTransformationInfoChanged,
   })?
   systemServicesManager_new;
 
@@ -2523,14 +2529,24 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
     PigeonInstanceManager? pigeon_instanceManager,
     required void Function(SystemServicesManager pigeon_instance, String errorDescription)
     onCameraError,
+    required void Function(
+      SystemServicesManager pigeon_instance,
+      int rotationDegrees,
+      bool hasCameraTransform,
+    )
+    onPreviewTransformationInfoChanged,
   }) {
     if (PigeonOverrides.systemServicesManager_new != null) {
-      return PigeonOverrides.systemServicesManager_new!(onCameraError: onCameraError);
+      return PigeonOverrides.systemServicesManager_new!(
+        onCameraError: onCameraError,
+        onPreviewTransformationInfoChanged: onPreviewTransformationInfoChanged,
+      );
     }
     return SystemServicesManager.pigeon_new(
       pigeon_binaryMessenger: pigeon_binaryMessenger,
       pigeon_instanceManager: pigeon_instanceManager,
       onCameraError: onCameraError,
+      onPreviewTransformationInfoChanged: onPreviewTransformationInfoChanged,
     );
   }
 
@@ -2539,6 +2555,7 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
     super.pigeon_binaryMessenger,
     super.pigeon_instanceManager,
     required this.onCameraError,
+    required this.onPreviewTransformationInfoChanged,
   }) {
     final int pigeonVar_instanceIdentifier = pigeon_instanceManager.addDartCreatedInstance(this);
     final _PigeonInternalProxyApiBaseCodec pigeonChannelCodec =
@@ -2570,6 +2587,7 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
     super.pigeon_binaryMessenger,
     super.pigeon_instanceManager,
     required this.onCameraError,
+    required this.onPreviewTransformationInfoChanged,
   });
 
   late final _PigeonInternalProxyApiBaseCodec _pigeonVar_codecSystemServicesManager =
@@ -2596,11 +2614,45 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
   /// release the associated Native object manually.
   final void Function(SystemServicesManager pigeon_instance, String errorDescription) onCameraError;
 
+  /// Called when the transformation info of the preview `SurfaceRequest`
+  /// changes (e.g. CameraX engages stream sharing, which delivers frames that
+  /// no longer carry the camera sensor transform).
+  ///
+  /// For the associated Native object to be automatically garbage collected,
+  /// it is required that the implementation of this `Function` doesn't have a
+  /// strong reference to the encapsulating class instance. When this `Function`
+  /// references a non-local variable, it is strongly recommended to access it
+  /// with a `WeakReference`:
+  ///
+  /// ```dart
+  /// final WeakReference weakMyVariable = WeakReference(myVariable);
+  /// final SystemServicesManager instance = SystemServicesManager(
+  ///  onPreviewTransformationInfoChanged: (SystemServicesManager pigeon_instance, ...) {
+  ///    print(weakMyVariable?.target);
+  ///  },
+  /// );
+  /// ```
+  ///
+  /// Alternatively, [PigeonInstanceManager.removeWeakReference] can be used to
+  /// release the associated Native object manually.
+  final void Function(
+    SystemServicesManager pigeon_instance,
+    int rotationDegrees,
+    bool hasCameraTransform,
+  )
+  onPreviewTransformationInfoChanged;
+
   static void pigeon_setUpMessageHandlers({
     bool pigeon_clearHandlers = false,
     BinaryMessenger? pigeon_binaryMessenger,
     PigeonInstanceManager? pigeon_instanceManager,
     void Function(SystemServicesManager pigeon_instance, String errorDescription)? onCameraError,
+    void Function(
+      SystemServicesManager pigeon_instance,
+      int rotationDegrees,
+      bool hasCameraTransform,
+    )?
+    onPreviewTransformationInfoChanged,
   }) {
     final _PigeonInternalProxyApiBaseCodec pigeonChannelCodec = _PigeonInternalProxyApiBaseCodec(
       pigeon_instanceManager ?? PigeonInstanceManager.instance,
@@ -2624,6 +2676,36 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
               arg_pigeon_instance,
               arg_errorDescription,
             );
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+
+    {
+      final pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.camera_android_camerax.SystemServicesManager.onPreviewTransformationInfoChanged',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (pigeon_clearHandlers) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          final List<Object?> args = message! as List<Object?>;
+          final SystemServicesManager arg_pigeon_instance = args[0]! as SystemServicesManager;
+          final int arg_rotationDegrees = args[1]! as int;
+          final bool arg_hasCameraTransform = args[2]! as bool;
+          try {
+            (onPreviewTransformationInfoChanged ??
+                    arg_pigeon_instance.onPreviewTransformationInfoChanged)
+                .call(arg_pigeon_instance, arg_rotationDegrees, arg_hasCameraTransform);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -2696,6 +2778,7 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
       pigeon_binaryMessenger: pigeon_binaryMessenger,
       pigeon_instanceManager: pigeon_instanceManager,
       onCameraError: onCameraError,
+      onPreviewTransformationInfoChanged: onPreviewTransformationInfoChanged,
     );
   }
 }

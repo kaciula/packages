@@ -2965,6 +2965,49 @@ abstract class PigeonApiSystemServicesManager(
       }
     }
   }
+
+  /**
+   * Called when the transformation info of the preview `SurfaceRequest` changes (e.g. CameraX
+   * engages stream sharing, which delivers frames that no longer carry the camera sensor
+   * transform).
+   */
+  fun onPreviewTransformationInfoChanged(
+      pigeon_instanceArg: SystemServicesManager,
+      rotationDegreesArg: Long,
+      hasCameraTransformArg: Boolean,
+      callback: (Result<Unit>) -> Unit
+  ) {
+    if (pigeonRegistrar.ignoreCallsToDart) {
+      callback(
+          Result.failure(
+              CameraXError("ignore-calls-error", "Calls to Dart are being ignored.", "")))
+      return
+    } else if (!pigeonRegistrar.instanceManager.containsInstance(pigeon_instanceArg)) {
+      callback(
+          Result.failure(
+              CameraXError(
+                  "missing-instance-error",
+                  "Callback to `SystemServicesManager.onPreviewTransformationInfoChanged` failed because native instance was not in the instance manager.",
+                  "")))
+      return
+    }
+    val binaryMessenger = pigeonRegistrar.binaryMessenger
+    val codec = pigeonRegistrar.codec
+    val channelName =
+        "dev.flutter.pigeon.camera_android_camerax.SystemServicesManager.onPreviewTransformationInfoChanged"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(pigeon_instanceArg, rotationDegreesArg, hasCameraTransformArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(CameraXError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(CameraXLibraryPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
 }
 /** Contains data when an attempt to retrieve camera permissions fails. */
 @Suppress("UNCHECKED_CAST")
