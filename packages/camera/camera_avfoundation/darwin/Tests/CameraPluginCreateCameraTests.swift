@@ -52,7 +52,8 @@ final class CameraPluginCreateCameraTests: XCTestCase {
         framesPerSecond: nil,
         videoBitrate: nil,
         audioBitrate: nil,
-        enableAudio: false)
+        enableAudio: false),
+      stabilizationMode: .off
     ) { result in
       expectation.fulfill()
     }
@@ -87,7 +88,8 @@ final class CameraPluginCreateCameraTests: XCTestCase {
         framesPerSecond: nil,
         videoBitrate: nil,
         audioBitrate: nil,
-        enableAudio: true)
+        enableAudio: true),
+      stabilizationMode: .off
     ) { result in
       expectation.fulfill()
     }
@@ -119,7 +121,8 @@ final class CameraPluginCreateCameraTests: XCTestCase {
         framesPerSecond: nil,
         videoBitrate: nil,
         audioBitrate: nil,
-        enableAudio: true)
+        enableAudio: true),
+      stabilizationMode: .off
     ) { result in
       expectation.fulfill()
     }

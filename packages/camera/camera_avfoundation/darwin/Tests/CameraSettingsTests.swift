@@ -176,7 +176,8 @@ final class CameraSettingsTests: XCTestCase {
     var resultValue: Int64?
     camera.createCameraOnSessionQueue(
       withName: "acamera",
-      settings: mediaSettings
+      settings: mediaSettings,
+      stabilizationMode: .off
     ) { result in
       resultValue = self.assertSuccess(result)
       expectation.fulfill()

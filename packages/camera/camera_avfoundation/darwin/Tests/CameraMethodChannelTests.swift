@@ -37,7 +37,8 @@ final class CameraMethodChannelTests: XCTestCase {
         videoBitrate: nil,
         audioBitrate: nil,
         enableAudio: true
-      )
+      ),
+      stabilizationMode: .off
     ) { result in
       resultValue = self.assertSuccess(result)
       expectation.fulfill()
@@ -61,7 +62,8 @@ final class CameraMethodChannelTests: XCTestCase {
         videoBitrate: nil,
         audioBitrate: nil,
         enableAudio: true
-      )
+      ),
+      stabilizationMode: .off
     ) { result in
       createExpectation.fulfill()
     }

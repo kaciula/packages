@@ -44,7 +44,8 @@ final class CameraInitRaceConditionsTests: XCTestCase {
         videoBitrate: nil,
         audioBitrate: nil,
         enableAudio: true
-      )
+      ),
+      stabilizationMode: .off
     ) { result in
       createExpectation.fulfill()
     }
@@ -70,7 +71,8 @@ final class CameraInitRaceConditionsTests: XCTestCase {
         videoBitrate: nil,
         audioBitrate: nil,
         enableAudio: true
-      )
+      ),
+      stabilizationMode: .off
     ) { result in
       createExpectation.fulfill()
     }
