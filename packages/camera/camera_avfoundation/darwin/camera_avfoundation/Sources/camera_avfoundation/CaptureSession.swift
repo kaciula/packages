@@ -12,6 +12,7 @@ protocol CaptureSession: NSObjectProtocol {
   var outputs: [AVCaptureOutput] { get }
   var automaticallyConfiguresApplicationAudioSession: Bool { get set }
   var isRunning: Bool { get }
+  var isInterrupted: Bool { get }
 
   func beginConfiguration()
   func commitConfiguration()

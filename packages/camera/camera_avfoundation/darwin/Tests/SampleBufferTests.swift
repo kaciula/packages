@@ -274,6 +274,62 @@ final class CameraSampleBufferTests: XCTestCase {
     XCTAssertFalse(sampleAppended, "Sample cannot be appended when readyForMoreMediaData is NO.")
   }
 
+  // https://linear.app/protern/issue/VID-700
+  func testDidOutputSampleBufferMustAppendVideoWhenAudioSessionStoppedDuringPhoneCall() {
+    let (camera, _, adaptorMock, inputMock) = createCamera()
+    let audioSessionMock = camera.audioCaptureSession as! MockCaptureSession
+    let testVideoConnection = CameraTestUtils.createTestConnection(
+      camera.captureVideoOutput.avOutput)
+
+    var appendedVideoSampleCount = 0
+    adaptorMock.appendStub = { _, _ in
+      appendedVideoSampleCount += 1
+      return true
+    }
+    inputMock.isReadyForMoreMediaData = true
+
+    camera.startVideoRecording(completion: { _ in }, messengerForStreaming: nil)
+    // An active phone call outranks the app's audio session, so the audio capture session
+    // fails to start ('!pri') and stops for the rest of the recording.
+    audioSessionMock.isRunning = false
+
+    for time: Int64 in 1...3 {
+      camera.captureOutput(
+        camera.captureVideoOutput.avOutput,
+        didOutput: CameraTestUtils.createTestSampleBuffer(
+          timestamp: CMTimeMake(value: time, timescale: 1),
+          duration: .invalid),
+        from: testVideoConnection)
+    }
+
+    XCTAssertEqual(appendedVideoSampleCount, 3)
+  }
+
+  func testDidOutputSampleBufferMustNotAppendVideoWhileAudioSessionIsInterrupted() {
+    let (camera, _, adaptorMock, inputMock) = createCamera()
+    let audioSessionMock = camera.audioCaptureSession as! MockCaptureSession
+    let testVideoConnection = CameraTestUtils.createTestConnection(
+      camera.captureVideoOutput.avOutput)
+
+    var appendedVideoSampleCount = 0
+    adaptorMock.appendStub = { _, _ in
+      appendedVideoSampleCount += 1
+      return true
+    }
+    inputMock.isReadyForMoreMediaData = true
+
+    camera.startVideoRecording(completion: { _ in }, messengerForStreaming: nil)
+    audioSessionMock.isRunning = false
+    audioSessionMock.isInterrupted = true
+
+    camera.captureOutput(
+      camera.captureVideoOutput.avOutput,
+      didOutput: CameraTestUtils.createTestSampleBuffer(),
+      from: testVideoConnection)
+
+    XCTAssertEqual(appendedVideoSampleCount, 0)
+  }
+
   func testStopVideoRecordingWithCompletionMustCallCompletion() {
     let (camera, writerMock, _, _) = createCamera()
 

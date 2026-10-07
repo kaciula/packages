@@ -1295,8 +1295,10 @@ final class DefaultCamera: NSObject, Camera {
 
     handleSampleBufferStreaming(sampleBuffer)
 
+    // An audio session that stopped without an interruption (e.g. '!pri' during a phone call)
+    // never resumes, so record video-only instead of dropping every frame.
     if isRecording && !isRecordingPaused && videoCaptureSession.isRunning
-      && audioCaptureSession.isRunning
+      && (audioCaptureSession.isRunning || !audioCaptureSession.isInterrupted)
     {
       if videoWriter?.status == .failed, let error = videoWriter?.error {
         reportErrorMessage("\(error)")
