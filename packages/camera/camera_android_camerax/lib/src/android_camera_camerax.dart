@@ -460,6 +460,13 @@ class AndroidCameraCameraX extends CameraPlatform {
       await deviceOrientationManager.getUiOrientation(),
     );
     _initialDefaultDisplayRotation = await deviceOrientationManager.getDefaultDisplayRotation();
+    // Seed the controller with the same orientation the rotated preview starts
+    // from, so the two rotation corrections agree even when the first native
+    // orientation event is late or never arrives (e.g. camera opened in
+    // landscape on a device lying flat).
+    deviceOrientationChangedStreamController.add(
+      DeviceOrientationChangedEvent(_initialDeviceOrientation),
+    );
 
     return _flutterSurfaceTextureId;
   }

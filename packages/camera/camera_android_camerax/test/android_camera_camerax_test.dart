@@ -1352,6 +1352,40 @@ void main() {
     expect(camera.enableRecordingAudio, isTrue);
   });
 
+  test('createCamera emits the initial UI orientation on the device orientation stream', () async {
+    final AndroidCameraCameraX camera = AndroidCameraCameraX();
+    const CameraDescription testCameraDescription = CameraDescription(
+      name: 'cameraName',
+      lensDirection: CameraLensDirection.back,
+      sensorOrientation: 90,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
+    final MockCamera mockCamera = MockCamera();
+    final MockProcessCameraProvider mockProcessCameraProvider = MockProcessCameraProvider();
+    final MockCameraInfo mockCameraInfo = MockCameraInfo();
+    final StreamQueue<DeviceOrientationChangedEvent> streamQueue =
+        StreamQueue<DeviceOrientationChangedEvent>(camera.onDeviceOrientationChanged());
+
+    setUpOverridesForTestingUseCaseConfiguration(mockProcessCameraProvider);
+    PigeonOverrides.deviceOrientationManager_new =
+        ({required void Function(DeviceOrientationManager, String) onDeviceOrientationChanged}) {
+          final MockDeviceOrientationManager manager = MockDeviceOrientationManager();
+          when(manager.getUiOrientation()).thenAnswer((_) async => 'LANDSCAPE_LEFT');
+          return manager;
+        };
+    when(mockProcessCameraProvider.bindToLifecycle(any, any)).thenAnswer((_) async => mockCamera);
+    when(mockCamera.getCameraInfo()).thenAnswer((_) async => mockCameraInfo);
+    when(mockCameraInfo.getCameraState()).thenAnswer((_) async => MockLiveCameraState());
+
+    await camera.createCamera(testCameraDescription, ResolutionPreset.high);
+
+    expect(
+      await streamQueue.next,
+      const DeviceOrientationChangedEvent(DeviceOrientation.landscapeLeft),
+    );
+    await streamQueue.cancel();
+  });
+
   test('createCamera and initializeCamera sets targetFps as expected', () async {
     final camera = AndroidCameraCameraX();
     const CameraLensDirection testLensDirection = CameraLensDirection.back;
