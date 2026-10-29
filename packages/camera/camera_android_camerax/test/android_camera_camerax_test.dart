@@ -65,6 +65,14 @@ void main() {
 
   setUp(() {
     PigeonOverrides.pigeon_reset();
+    // Binding use cases records the display rotation, which tests that do not
+    // exercise orientation handling do not need to care about.
+    PigeonOverrides.deviceOrientationManager_new =
+        ({required void Function(DeviceOrientationManager, String) onDeviceOrientationChanged}) {
+          final manager = MockDeviceOrientationManager();
+          when(manager.getDefaultDisplayRotation()).thenAnswer((_) async => Surface.rotation0);
+          return manager;
+        };
     GenericsPigeonOverrides.reset();
   });
 
@@ -1350,6 +1358,41 @@ void main() {
 
     expect(camera.sensorOrientationDegrees, testSensorOrientation);
     expect(camera.enableRecordingAudio, isTrue);
+  });
+
+  test('createCamera emits the initial UI orientation on the device orientation stream', () async {
+    final camera = AndroidCameraCameraX();
+    const testCameraDescription = CameraDescription(
+      name: 'cameraName',
+      lensDirection: CameraLensDirection.back,
+      sensorOrientation: 90,
+      availableStabilizationModes: <CameraStabilizationMode>[],
+    );
+    final mockCamera = MockCamera();
+    final mockProcessCameraProvider = MockProcessCameraProvider();
+    final mockCameraInfo = MockCameraInfo();
+    final streamQueue = StreamQueue<DeviceOrientationChangedEvent>(
+      camera.onDeviceOrientationChanged(),
+    );
+
+    setUpOverridesForTestingUseCaseConfiguration(mockProcessCameraProvider);
+    PigeonOverrides.deviceOrientationManager_new =
+        ({required void Function(DeviceOrientationManager, String) onDeviceOrientationChanged}) {
+          final manager = MockDeviceOrientationManager();
+          when(manager.getUiOrientation()).thenAnswer((_) async => 'LANDSCAPE_LEFT');
+          return manager;
+        };
+    when(mockProcessCameraProvider.bindToLifecycle(any, any)).thenAnswer((_) async => mockCamera);
+    when(mockCamera.getCameraInfo()).thenAnswer((_) async => mockCameraInfo);
+    when(mockCameraInfo.getCameraState()).thenAnswer((_) async => MockLiveCameraState());
+
+    await camera.createCamera(testCameraDescription, ResolutionPreset.high);
+
+    expect(
+      await streamQueue.next,
+      const DeviceOrientationChangedEvent(DeviceOrientation.landscapeLeft),
+    );
+    await streamQueue.cancel();
   });
 
   test('createCamera and initializeCamera sets targetFps as expected', () async {

@@ -25,6 +25,7 @@ final class SurfaceTextureRotatedPreview extends StatefulWidget {
     this.deviceOrientationStream,
     this.deviceOrientationManager, {
     required this.child,
+    this.preRotatedQuarterTurns = 0,
     super.key,
   });
 
@@ -42,6 +43,14 @@ final class SurfaceTextureRotatedPreview extends StatefulWidget {
   ///
   /// Instance required to check the current rotation of the default Android display.
   final DeviceOrientationManager deviceOrientationManager;
+
+  /// The counter-clockwise quarter turns the preview frames were already
+  /// rotated by before reaching the preview surface.
+  ///
+  /// Non-zero when CameraX delivers pre-transformed frames that are upright
+  /// for the display rotation the preview use case targeted, which the
+  /// correction for the current display rotation must not apply again.
+  final int preRotatedQuarterTurns;
 
   /// The camera preview [Widget] to rotate.
   final Widget child;
@@ -105,7 +114,9 @@ final class _SurfaceTextureRotatedPreviewState extends State<SurfaceTextureRotat
           // correct for this plugin.
           final int currentDefaultDisplayRotation = snapshot.data!;
           final int rotationCorrection =
-              currentDefaultDisplayRotation - preappliedRotationQuarterTurns;
+              currentDefaultDisplayRotation -
+              preappliedRotationQuarterTurns -
+              widget.preRotatedQuarterTurns;
 
           return RotatedBox(quarterTurns: rotationCorrection, child: widget.child);
         } else {

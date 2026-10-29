@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart' show Texture, Widget, visibleForTesting;
 import 'package:stream_transform/stream_transform.dart';
 
 import 'camerax_library.dart';
+import 'preview_transformation_info.dart';
 import 'rotated_preview_delegate.dart';
 
 /// The Android implementation of [CameraPlatform] that uses the CameraX library.
@@ -76,8 +77,11 @@ class AndroidCameraCameraX extends CameraPlatform {
       cameraErrorStreamController.add(errorDescription);
     },
     onPreviewTransformationInfoChanged: (_, int rotationDegrees, bool hasCameraTransform) {
-      _previewHasCameraTransform = hasCameraTransform;
-      _previewHasCameraTransformStreamController.add(hasCameraTransform);
+      _previewTransformationInfo = PreviewTransformationInfo(
+        hasCameraTransform: hasCameraTransform,
+        boundDisplayRotation: _previewBoundDisplayRotation,
+      );
+      _previewTransformationInfoStreamController.add(_previewTransformationInfo);
     },
   );
 
@@ -89,17 +93,28 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// lifetime.
   bool _videoCaptureEagerlyBound = false;
 
-  /// Whether frames delivered to the preview surface still carry the camera
-  /// sensor transform.
+  /// The latest transformation info of the preview `SurfaceRequest`.
   ///
-  /// CameraX reports false when it delivers pre-transformed frames, e.g. via
-  /// stream sharing when the bound use case combination exceeds the device's
-  /// supported surface combinations. In that case the preview widget must not
-  /// apply sensor orientation compensation.
-  bool _previewHasCameraTransform = true;
+  /// CameraX reports frames without the camera sensor transform when it
+  /// delivers pre-transformed frames, e.g. via stream sharing when the bound
+  /// use case combination exceeds the device's supported surface combinations.
+  /// In that case the preview widget must not apply sensor orientation
+  /// compensation, and must undo the rotation the frames were prepared for.
+  PreviewTransformationInfo _previewTransformationInfo = const PreviewTransformationInfo(
+    hasCameraTransform: true,
+    boundDisplayRotation: Surface.rotation0,
+  );
 
-  final StreamController<bool> _previewHasCameraTransformStreamController =
-      StreamController<bool>.broadcast();
+  /// The rotation of the default display when use cases were last bound.
+  ///
+  /// CameraX resolves the target rotation of use cases bound without an
+  /// explicit one from the default display at bind time, and stream sharing
+  /// pre-rotates preview frames for that rotation. CameraX does not report it
+  /// back for stream-shared previews, so it is recorded before every bind.
+  int _previewBoundDisplayRotation = Surface.rotation0;
+
+  final StreamController<PreviewTransformationInfo> _previewTransformationInfoStreamController =
+      StreamController<PreviewTransformationInfo>.broadcast();
 
   /// Handles retrieving media orientation for a device.
   late final DeviceOrientationManager deviceOrientationManager = DeviceOrientationManager(
@@ -460,6 +475,13 @@ class AndroidCameraCameraX extends CameraPlatform {
       await deviceOrientationManager.getUiOrientation(),
     );
     _initialDefaultDisplayRotation = await deviceOrientationManager.getDefaultDisplayRotation();
+    // Seed the controller with the same orientation the rotated preview starts
+    // from, so the two rotation corrections agree even when the first native
+    // orientation event is late or never arrives (e.g. camera opened in
+    // landscape on a device lying flat).
+    deviceOrientationChangedStreamController.add(
+      DeviceOrientationChangedEvent(_initialDeviceOrientation),
+    );
 
     return _flutterSurfaceTextureId;
   }
@@ -511,6 +533,7 @@ class AndroidCameraCameraX extends CameraPlatform {
     // session configuration never changes and starting a recording only
     // starts the encoder. Devices that cannot bind the full combination fall
     // back to binding video capture at first use, as before.
+    await _recordBoundDisplayRotation();
     try {
       camera = await processCameraProvider!.bindToLifecycle(cameraSelector!, <UseCase>[
         preview!,
@@ -1023,6 +1046,7 @@ class AndroidCameraCameraX extends CameraPlatform {
       useCases.add(imageAnalysis!);
     }
     await processCameraProvider?.unbindAll();
+    await _recordBoundDisplayRotation();
     camera = await processCameraProvider?.bindToLifecycle(cameraSelector!, useCases);
 
     // Retrieve info required for correcting the rotation of the camera preview
@@ -1067,8 +1091,8 @@ class AndroidCameraCameraX extends CameraPlatform {
       sensorOrientationDegrees: sensorOrientationDegrees,
       cameraIsFrontFacing: cameraIsFrontFacing,
       deviceOrientationManager: deviceOrientationManager,
-      initialHasCameraTransform: _previewHasCameraTransform,
-      hasCameraTransformStream: _previewHasCameraTransformStreamController.stream,
+      initialTransformationInfo: _previewTransformationInfo,
+      transformationInfoStream: _previewTransformationInfoStreamController.stream,
       child: preview,
     );
   }
@@ -1361,9 +1385,14 @@ class AndroidCameraCameraX extends CameraPlatform {
       return;
     }
 
+    await _recordBoundDisplayRotation();
     camera = await processCameraProvider!.bindToLifecycle(cameraSelector!, <UseCase>[useCase]);
 
     await _updateCameraInfoAndLiveCameraState(cameraId);
+  }
+
+  Future<void> _recordBoundDisplayRotation() async {
+    _previewBoundDisplayRotation = await deviceOrientationManager.getDefaultDisplayRotation();
   }
 
   /// Configures the [imageAnalysis] instance for image streaming.
