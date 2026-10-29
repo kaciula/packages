@@ -1353,23 +1353,24 @@ void main() {
   });
 
   test('createCamera emits the initial UI orientation on the device orientation stream', () async {
-    final AndroidCameraCameraX camera = AndroidCameraCameraX();
-    const CameraDescription testCameraDescription = CameraDescription(
+    final camera = AndroidCameraCameraX();
+    const testCameraDescription = CameraDescription(
       name: 'cameraName',
       lensDirection: CameraLensDirection.back,
       sensorOrientation: 90,
       availableStabilizationModes: <CameraStabilizationMode>[],
     );
-    final MockCamera mockCamera = MockCamera();
-    final MockProcessCameraProvider mockProcessCameraProvider = MockProcessCameraProvider();
-    final MockCameraInfo mockCameraInfo = MockCameraInfo();
-    final StreamQueue<DeviceOrientationChangedEvent> streamQueue =
-        StreamQueue<DeviceOrientationChangedEvent>(camera.onDeviceOrientationChanged());
+    final mockCamera = MockCamera();
+    final mockProcessCameraProvider = MockProcessCameraProvider();
+    final mockCameraInfo = MockCameraInfo();
+    final streamQueue = StreamQueue<DeviceOrientationChangedEvent>(
+      camera.onDeviceOrientationChanged(),
+    );
 
     setUpOverridesForTestingUseCaseConfiguration(mockProcessCameraProvider);
     PigeonOverrides.deviceOrientationManager_new =
         ({required void Function(DeviceOrientationManager, String) onDeviceOrientationChanged}) {
-          final MockDeviceOrientationManager manager = MockDeviceOrientationManager();
+          final manager = MockDeviceOrientationManager();
           when(manager.getUiOrientation()).thenAnswer((_) async => 'LANDSCAPE_LEFT');
           return manager;
         };
