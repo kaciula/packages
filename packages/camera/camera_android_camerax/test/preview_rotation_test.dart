@@ -163,7 +163,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -2047,12 +2047,12 @@ void main() {
         // Capture the transformation info callback that the camera wires into
         // its SystemServicesManager so the test can emulate the native side
         // reporting transformation info changes.
-        late void Function(SystemServicesManager, int, int, bool)
+        late void Function(SystemServicesManager, int, bool)
         capturedOnPreviewTransformationInfoChanged;
         PigeonOverrides.systemServicesManager_new =
             ({
               required void Function(SystemServicesManager, String) onCameraError,
-              required void Function(SystemServicesManager, int, int, bool)
+              required void Function(SystemServicesManager, int, bool)
               onPreviewTransformationInfoChanged,
             }) {
               capturedOnPreviewTransformationInfoChanged = onPreviewTransformationInfoChanged;
@@ -2084,12 +2084,7 @@ void main() {
         // device supports concurrently. Sensor orientation compensation must
         // be skipped; only the user interface orientation (portrait up) vs
         // default display rotation (0) disagreement remains, which is 0.
-        capturedOnPreviewTransformationInfoChanged(
-          camera.systemServicesManager,
-          0,
-          Surface.rotation0,
-          false,
-        );
+        capturedOnPreviewTransformationInfoChanged(camera.systemServicesManager, 0, false);
         await tester.pumpAndSettle();
 
         rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));
@@ -2097,12 +2092,7 @@ void main() {
 
         // Frames carry the camera transform again, e.g. the recording stopped
         // and stream sharing disengaged.
-        capturedOnPreviewTransformationInfoChanged(
-          camera.systemServicesManager,
-          90,
-          Surface.rotation0,
-          true,
-        );
+        capturedOnPreviewTransformationInfoChanged(camera.systemServicesManager, 90, true);
         await tester.pumpAndSettle();
 
         rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));
@@ -2137,12 +2127,12 @@ void main() {
               _serializeDeviceOrientation(DeviceOrientation.landscapeLeft),
         );
 
-        late void Function(SystemServicesManager, int, int, bool)
+        late void Function(SystemServicesManager, int, bool)
         capturedOnPreviewTransformationInfoChanged;
         PigeonOverrides.systemServicesManager_new =
             ({
               required void Function(SystemServicesManager, String) onCameraError,
-              required void Function(SystemServicesManager, int, int, bool)
+              required void Function(SystemServicesManager, int, bool)
               onPreviewTransformationInfoChanged,
             }) {
               capturedOnPreviewTransformationInfoChanged = onPreviewTransformationInfoChanged;
@@ -2171,27 +2161,17 @@ void main() {
         expect((rotatedBox.quarterTurns + 4) % 4, _0DegreesClockwise);
 
         // Frames arrive pre-transformed for the display rotation of 90 degrees
-        // the preview use case targeted, e.g. CameraX engaged stream sharing
-        // while the camera was bound in landscape. Those 3 quarter turns must
-        // not be applied again, which leaves (3 - 3 - 3 + 4) % 4 = 1.
-        capturedOnPreviewTransformationInfoChanged(
-          camera.systemServicesManager,
-          0,
-          Surface.rotation90,
-          false,
-        );
+        // the camera was bound with, e.g. CameraX engaged stream sharing while
+        // the camera was bound in landscape. Those 3 quarter turns must not be
+        // applied again, which leaves (3 - 3 - 3 + 4) % 4 = 1.
+        capturedOnPreviewTransformationInfoChanged(camera.systemServicesManager, 0, false);
         await tester.pumpAndSettle();
 
         rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));
         expect((rotatedBox.quarterTurns + 4) % 4, _90DegreesClockwise);
 
         // Frames carry the camera transform again.
-        capturedOnPreviewTransformationInfoChanged(
-          camera.systemServicesManager,
-          0,
-          Surface.rotation90,
-          true,
-        );
+        capturedOnPreviewTransformationInfoChanged(camera.systemServicesManager, 0, true);
         await tester.pumpAndSettle();
 
         rotatedBox = tester.widget<RotatedBox>(find.byType(RotatedBox));

@@ -8,7 +8,10 @@ import 'package:meta/meta.dart';
 @immutable
 final class PreviewTransformationInfo {
   /// Creates [PreviewTransformationInfo].
-  const PreviewTransformationInfo({required this.hasCameraTransform, required this.targetRotation});
+  const PreviewTransformationInfo({
+    required this.hasCameraTransform,
+    required this.boundDisplayRotation,
+  });
 
   /// Whether frames delivered to the preview surface still carry the camera
   /// sensor transform.
@@ -18,20 +21,21 @@ final class PreviewTransformationInfo {
   /// supported surface combinations.
   final bool hasCameraTransform;
 
-  /// The rotation the preview use case targets, as a `Surface` rotation
-  /// constant.
+  /// The rotation of the default display when the preview use case was last
+  /// bound, as a `Surface` rotation constant.
   ///
-  /// When [hasCameraTransform] is false, frames arrive already upright for a
-  /// display with this rotation.
-  final int targetRotation;
+  /// CameraX targets this rotation for use cases bound without an explicit
+  /// target rotation, so when [hasCameraTransform] is false, frames arrive
+  /// already upright for a display with this rotation.
+  final int boundDisplayRotation;
 
   @override
   bool operator ==(Object other) {
     return other is PreviewTransformationInfo &&
         other.hasCameraTransform == hasCameraTransform &&
-        other.targetRotation == targetRotation;
+        other.boundDisplayRotation == boundDisplayRotation;
   }
 
   @override
-  int get hashCode => Object.hash(hasCameraTransform, targetRotation);
+  int get hashCode => Object.hash(hasCameraTransform, boundDisplayRotation);
 }

@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.Surface;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.io.File;
@@ -179,10 +178,9 @@ public class SystemServicesTest {
     final SystemServicesManager instance =
         new SystemServicesManagerProxyApi.SystemServicesManagerImpl(mockApi);
     final Runnable onHandled = mock(Runnable.class);
-    instance.onPreviewTransformationInfoChanged(90, Surface.ROTATION_90, false, onHandled);
+    instance.onPreviewTransformationInfoChanged(90, false, onHandled);
 
     verify(mockApi)
-        .onPreviewTransformationInfoChanged(
-            eq(instance), eq(90L), eq((long) Surface.ROTATION_90), eq(false), any());
+        .onPreviewTransformationInfoChanged(eq(instance), eq(90L), eq(false), any());
   }
 }

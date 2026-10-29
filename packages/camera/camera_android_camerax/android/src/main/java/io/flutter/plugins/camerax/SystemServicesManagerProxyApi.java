@@ -56,10 +56,7 @@ public class SystemServicesManagerProxyApi extends PigeonApiSystemServicesManage
 
     @Override
     public void onPreviewTransformationInfoChanged(
-        int rotationDegrees,
-        int targetRotation,
-        boolean hasCameraTransform,
-        @NonNull Runnable onHandled) {
+        int rotationDegrees, boolean hasCameraTransform, @NonNull Runnable onHandled) {
       api.getPigeonRegistrar()
           .runOnMainThread(
               new ProxyApiRegistrar.FlutterMethodRunnable() {
@@ -68,7 +65,6 @@ public class SystemServicesManagerProxyApi extends PigeonApiSystemServicesManage
                   api.onPreviewTransformationInfoChanged(
                       SystemServicesManagerImpl.this,
                       rotationDegrees,
-                      targetRotation,
                       hasCameraTransform,
                       ResultCompat.asCompatCallback(
                           result -> {

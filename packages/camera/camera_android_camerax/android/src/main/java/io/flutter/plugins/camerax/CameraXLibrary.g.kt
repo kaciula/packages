@@ -2974,7 +2974,6 @@ abstract class PigeonApiSystemServicesManager(
   fun onPreviewTransformationInfoChanged(
       pigeon_instanceArg: SystemServicesManager,
       rotationDegreesArg: Long,
-      targetRotationArg: Long,
       hasCameraTransformArg: Boolean,
       callback: (Result<Unit>) -> Unit
   ) {
@@ -2997,8 +2996,7 @@ abstract class PigeonApiSystemServicesManager(
     val channelName =
         "dev.flutter.pigeon.camera_android_camerax.SystemServicesManager.onPreviewTransformationInfoChanged"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(
-        listOf(pigeon_instanceArg, rotationDegreesArg, targetRotationArg, hasCameraTransformArg)) {
+    channel.send(listOf(pigeon_instanceArg, rotationDegreesArg, hasCameraTransformArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(CameraXError(it[0] as String, it[1] as String, it[2] as String?)))

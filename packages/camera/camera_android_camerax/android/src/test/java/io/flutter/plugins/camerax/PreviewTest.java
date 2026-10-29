@@ -208,23 +208,20 @@ public class PreviewTest {
 
     doAnswer(
             invocation -> {
-              ((Runnable) invocation.getArgument(3)).run();
+              ((Runnable) invocation.getArgument(2)).run();
               return null;
             })
         .when(mockSystemServicesManager)
-        .onPreviewTransformationInfoChanged(
-            anyInt(), anyInt(), anyBoolean(), any(Runnable.class));
+        .onPreviewTransformationInfoChanged(anyInt(), anyBoolean(), any(Runnable.class));
 
     final SurfaceRequest.TransformationInfo mockTransformationInfo =
         mock(SurfaceRequest.TransformationInfo.class);
     when(mockTransformationInfo.getRotationDegrees()).thenReturn(90);
-    when(mockTransformationInfo.getTargetRotation()).thenReturn(Surface.ROTATION_90);
     when(mockTransformationInfo.hasCameraTransform()).thenReturn(false);
     transformationInfoListenerCaptor.getValue().onTransformationInfoUpdate(mockTransformationInfo);
 
     verify(mockSystemServicesManager)
-        .onPreviewTransformationInfoChanged(
-            eq(90), eq(Surface.ROTATION_90), eq(false), any(Runnable.class));
+        .onPreviewTransformationInfoChanged(eq(90), eq(false), any(Runnable.class));
     verify(mockSurfaceRequest)
         .provideSurface(surfaceCaptor.capture(), any(Executor.class), consumerCaptor.capture());
 

@@ -65,6 +65,14 @@ void main() {
 
   setUp(() {
     PigeonOverrides.pigeon_reset();
+    // Binding use cases records the display rotation, which tests that do not
+    // exercise orientation handling do not need to care about.
+    PigeonOverrides.deviceOrientationManager_new =
+        ({required void Function(DeviceOrientationManager, String) onDeviceOrientationChanged}) {
+          final manager = MockDeviceOrientationManager();
+          when(manager.getDefaultDisplayRotation()).thenAnswer((_) async => Surface.rotation0);
+          return manager;
+        };
     GenericsPigeonOverrides.reset();
   });
 
@@ -234,7 +242,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -444,7 +452,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -587,7 +595,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             when(mockSystemServicesManager.requestCameraPermissions(any)).thenAnswer((_) async {
@@ -1133,7 +1141,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             return MockSystemServicesManager();
@@ -1527,7 +1535,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -1943,7 +1951,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) => MockSystemServicesManager();
     PigeonOverrides.deviceOrientationManager_new =
@@ -2107,7 +2115,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             final mockSystemServicesManager = MockSystemServicesManager();
@@ -2334,7 +2342,7 @@ void main() {
         PigeonOverrides.systemServicesManager_new =
             ({
               required void Function(SystemServicesManager, String) onCameraError,
-              required void Function(SystemServicesManager, int, int, bool)
+              required void Function(SystemServicesManager, int, bool)
               onPreviewTransformationInfoChanged,
             }) {
               final mockSystemServicesManager = MockSystemServicesManager();
@@ -2444,7 +2452,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             final mockSystemServicesManager = MockSystemServicesManager();
@@ -2549,7 +2557,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             final mockSystemServicesManager = MockSystemServicesManager();
@@ -2648,7 +2656,7 @@ void main() {
         PigeonOverrides.systemServicesManager_new =
             ({
               required void Function(SystemServicesManager, String) onCameraError,
-              required void Function(SystemServicesManager, int, int, bool)
+              required void Function(SystemServicesManager, int, bool)
               onPreviewTransformationInfoChanged,
             }) {
               final mockSystemServicesManager = MockSystemServicesManager();
@@ -2912,7 +2920,7 @@ void main() {
         PigeonOverrides.systemServicesManager_new =
             ({
               required void Function(SystemServicesManager, String) onCameraError,
-              required void Function(SystemServicesManager, int, int, bool)
+              required void Function(SystemServicesManager, int, bool)
               onPreviewTransformationInfoChanged,
             }) {
               final mockSystemServicesManager = MockSystemServicesManager();
@@ -3306,7 +3314,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             final mockSystemServicesManager = MockSystemServicesManager();
@@ -3527,7 +3535,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             final mockSystemServicesManager = MockSystemServicesManager();
@@ -3621,7 +3629,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -3670,7 +3678,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             return MockSystemServicesManager();
@@ -3850,7 +3858,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             return MockSystemServicesManager();
@@ -3899,7 +3907,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -3930,7 +3938,7 @@ void main() {
     PigeonOverrides.systemServicesManager_new =
         ({
           required void Function(SystemServicesManager, String) onCameraError,
-          required void Function(SystemServicesManager, int, int, bool)
+          required void Function(SystemServicesManager, int, bool)
           onPreviewTransformationInfoChanged,
         }) {
           return MockSystemServicesManager();
@@ -6131,7 +6139,7 @@ void main() {
       PigeonOverrides.systemServicesManager_new =
           ({
             required void Function(SystemServicesManager, String) onCameraError,
-            required void Function(SystemServicesManager, int, int, bool)
+            required void Function(SystemServicesManager, int, bool)
             onPreviewTransformationInfoChanged,
           }) {
             final mockSystemServicesManager = MockSystemServicesManager();

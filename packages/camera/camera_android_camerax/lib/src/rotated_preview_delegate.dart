@@ -120,7 +120,7 @@ final class _RotatedPreviewDelegateState extends State<RotatedPreviewDelegate> {
         widget.deviceOrientationManager,
         preRotatedQuarterTurns: _transformationInfo.hasCameraTransform
             ? 0
-            : getQuarterTurnsFromSurfaceRotationConstant(_transformationInfo.targetRotation),
+            : getQuarterTurnsFromSurfaceRotationConstant(_transformationInfo.boundDisplayRotation),
         child: widget.child,
       );
     }

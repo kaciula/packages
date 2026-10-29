@@ -82,7 +82,6 @@ class PigeonOverrides {
     required void Function(
       SystemServicesManager pigeon_instance,
       int rotationDegrees,
-      int targetRotation,
       bool hasCameraTransform,
     )
     onPreviewTransformationInfoChanged,
@@ -2533,7 +2532,6 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
     required void Function(
       SystemServicesManager pigeon_instance,
       int rotationDegrees,
-      int targetRotation,
       bool hasCameraTransform,
     )
     onPreviewTransformationInfoChanged,
@@ -2620,10 +2618,6 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
   /// changes (e.g. CameraX engages stream sharing, which delivers frames that
   /// no longer carry the camera sensor transform).
   ///
-  /// `targetRotation` is the `Surface` rotation constant the preview use case
-  /// targets; pre-transformed frames are upright for a display with that
-  /// rotation.
-  ///
   /// For the associated Native object to be automatically garbage collected,
   /// it is required that the implementation of this `Function` doesn't have a
   /// strong reference to the encapsulating class instance. When this `Function`
@@ -2644,7 +2638,6 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
   final void Function(
     SystemServicesManager pigeon_instance,
     int rotationDegrees,
-    int targetRotation,
     bool hasCameraTransform,
   )
   onPreviewTransformationInfoChanged;
@@ -2657,7 +2650,6 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
     void Function(
       SystemServicesManager pigeon_instance,
       int rotationDegrees,
-      int targetRotation,
       bool hasCameraTransform,
     )?
     onPreviewTransformationInfoChanged,
@@ -2709,17 +2701,11 @@ class SystemServicesManager extends PigeonInternalProxyApiBaseClass {
           final List<Object?> args = message! as List<Object?>;
           final SystemServicesManager arg_pigeon_instance = args[0]! as SystemServicesManager;
           final int arg_rotationDegrees = args[1]! as int;
-          final int arg_targetRotation = args[2]! as int;
-          final bool arg_hasCameraTransform = args[3]! as bool;
+          final bool arg_hasCameraTransform = args[2]! as bool;
           try {
             (onPreviewTransformationInfoChanged ??
                     arg_pigeon_instance.onPreviewTransformationInfoChanged)
-                .call(
-                  arg_pigeon_instance,
-                  arg_rotationDegrees,
-                  arg_targetRotation,
-                  arg_hasCameraTransform,
-                );
+                .call(arg_pigeon_instance, arg_rotationDegrees, arg_hasCameraTransform);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

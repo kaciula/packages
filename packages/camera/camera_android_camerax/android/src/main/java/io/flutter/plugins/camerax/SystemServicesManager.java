@@ -29,18 +29,12 @@ public abstract class SystemServicesManager {
   /**
    * Forwards preview transformation info to Dart.
    *
-   * <p>{@code targetRotation} is the {@code Surface} rotation constant the preview use case
-   * targets; pre-transformed frames are upright for a display with that rotation.
-   *
    * <p>{@code onHandled} runs once Dart has handled the update (or the update could not be
    * delivered), allowing callers to sequence work that must not happen before the preview widget
    * has applied the transformation info.
    */
   abstract void onPreviewTransformationInfoChanged(
-      int rotationDegrees,
-      int targetRotation,
-      boolean hasCameraTransform,
-      @NonNull Runnable onHandled);
+      int rotationDegrees, boolean hasCameraTransform, @NonNull Runnable onHandled);
 
   @NonNull
   abstract Context getContext();
