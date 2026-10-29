@@ -2014,6 +2014,27 @@ class MockSystemServicesManager extends _i1.Mock implements _i2.SystemServicesMa
           as void Function(_i2.SystemServicesManager, String));
 
   @override
+  void Function(_i2.SystemServicesManager, int, int, bool) get onPreviewTransformationInfoChanged =>
+      (super.noSuchMethod(
+            Invocation.getter(#onPreviewTransformationInfoChanged),
+            returnValue:
+                (
+                  _i2.SystemServicesManager pigeon_instance,
+                  int rotationDegrees,
+                  int targetRotation,
+                  bool hasCameraTransform,
+                ) {},
+            returnValueForMissingStub:
+                (
+                  _i2.SystemServicesManager pigeon_instance,
+                  int rotationDegrees,
+                  int targetRotation,
+                  bool hasCameraTransform,
+                ) {},
+          )
+          as void Function(_i2.SystemServicesManager, int, int, bool));
+
+  @override
   _i2.PigeonInstanceManager get pigeon_instanceManager =>
       (super.noSuchMethod(
             Invocation.getter(#pigeon_instanceManager),

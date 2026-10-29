@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart' show Texture, Widget, visibleForTesting;
 import 'package:stream_transform/stream_transform.dart';
 
 import 'camerax_library.dart';
+import 'preview_transformation_info.dart';
 import 'rotated_preview_delegate.dart';
 
 /// The Android implementation of [CameraPlatform] that uses the CameraX library.
@@ -75,10 +76,14 @@ class AndroidCameraCameraX extends CameraPlatform {
     onCameraError: (_, String errorDescription) {
       cameraErrorStreamController.add(errorDescription);
     },
-    onPreviewTransformationInfoChanged: (_, int rotationDegrees, bool hasCameraTransform) {
-      _previewHasCameraTransform = hasCameraTransform;
-      _previewHasCameraTransformStreamController.add(hasCameraTransform);
-    },
+    onPreviewTransformationInfoChanged:
+        (_, int rotationDegrees, int targetRotation, bool hasCameraTransform) {
+          _previewTransformationInfo = PreviewTransformationInfo(
+            hasCameraTransform: hasCameraTransform,
+            targetRotation: targetRotation,
+          );
+          _previewTransformationInfoStreamController.add(_previewTransformationInfo);
+        },
   );
 
   /// Whether [videoCapture] was bound together with the other use cases when
@@ -89,17 +94,20 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// lifetime.
   bool _videoCaptureEagerlyBound = false;
 
-  /// Whether frames delivered to the preview surface still carry the camera
-  /// sensor transform.
+  /// The latest transformation info of the preview `SurfaceRequest`.
   ///
-  /// CameraX reports false when it delivers pre-transformed frames, e.g. via
-  /// stream sharing when the bound use case combination exceeds the device's
-  /// supported surface combinations. In that case the preview widget must not
-  /// apply sensor orientation compensation.
-  bool _previewHasCameraTransform = true;
+  /// CameraX reports frames without the camera sensor transform when it
+  /// delivers pre-transformed frames, e.g. via stream sharing when the bound
+  /// use case combination exceeds the device's supported surface combinations.
+  /// In that case the preview widget must not apply sensor orientation
+  /// compensation, and must undo the rotation the frames were prepared for.
+  PreviewTransformationInfo _previewTransformationInfo = const PreviewTransformationInfo(
+    hasCameraTransform: true,
+    targetRotation: Surface.rotation0,
+  );
 
-  final StreamController<bool> _previewHasCameraTransformStreamController =
-      StreamController<bool>.broadcast();
+  final StreamController<PreviewTransformationInfo> _previewTransformationInfoStreamController =
+      StreamController<PreviewTransformationInfo>.broadcast();
 
   /// Handles retrieving media orientation for a device.
   late final DeviceOrientationManager deviceOrientationManager = DeviceOrientationManager(
@@ -1074,8 +1082,8 @@ class AndroidCameraCameraX extends CameraPlatform {
       sensorOrientationDegrees: sensorOrientationDegrees,
       cameraIsFrontFacing: cameraIsFrontFacing,
       deviceOrientationManager: deviceOrientationManager,
-      initialHasCameraTransform: _previewHasCameraTransform,
-      hasCameraTransformStream: _previewHasCameraTransformStreamController.stream,
+      initialTransformationInfo: _previewTransformationInfo,
+      transformationInfoStream: _previewTransformationInfoStreamController.stream,
       child: preview,
     );
   }

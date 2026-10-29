@@ -189,6 +189,7 @@ class PreviewProxyApi extends PigeonApiPreview {
           transformationInfo ->
               systemServicesManager.onPreviewTransformationInfoChanged(
                   transformationInfo.getRotationDegrees(),
+                  transformationInfo.getTargetRotation(),
                   transformationInfo.hasCameraTransform(),
                   provideSurface));
     };

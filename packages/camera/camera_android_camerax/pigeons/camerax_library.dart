@@ -347,7 +347,11 @@ abstract class SystemServicesManager {
   /// Called when the transformation info of the preview `SurfaceRequest`
   /// changes (e.g. CameraX engages stream sharing, which delivers frames that
   /// no longer carry the camera sensor transform).
-  late void Function(int rotationDegrees, bool hasCameraTransform)
+  ///
+  /// `targetRotation` is the `Surface` rotation constant the preview use case
+  /// targets; pre-transformed frames are upright for a display with that
+  /// rotation.
+  late void Function(int rotationDegrees, int targetRotation, bool hasCameraTransform)
   onPreviewTransformationInfoChanged;
 
   @async

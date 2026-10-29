@@ -10,6 +10,8 @@ import 'package:meta/meta.dart';
 
 import 'camerax_library.g.dart';
 import 'image_reader_rotated_preview.dart';
+import 'preview_transformation_info.dart';
+import 'rotated_preview_utils.dart';
 import 'surface_texture_rotated_preview.dart';
 
 /// Widget that rotates the camera preview to be upright according to the
@@ -30,8 +32,8 @@ final class RotatedPreviewDelegate extends StatefulWidget {
     required this.sensorOrientationDegrees,
     required this.cameraIsFrontFacing,
     required this.deviceOrientationManager,
-    required this.initialHasCameraTransform,
-    required this.hasCameraTransformStream,
+    required this.initialTransformationInfo,
+    required this.transformationInfoStream,
     required this.child,
   });
 
@@ -61,18 +63,17 @@ final class RotatedPreviewDelegate extends StatefulWidget {
   /// Instance required to check the current rotation of the default Android display.
   final DeviceOrientationManager deviceOrientationManager;
 
-  /// Whether frames currently delivered to the preview surface still carry the
-  /// camera sensor transform.
-  final bool initialHasCameraTransform;
+  /// The transformation info of the frames currently delivered to the preview
+  /// surface.
+  final PreviewTransformationInfo initialTransformationInfo;
 
-  /// Stream of changes to whether preview frames carry the camera sensor
-  /// transform.
+  /// Stream of changes to the transformation info of the preview frames.
   ///
-  /// CameraX reports false when it delivers pre-transformed frames, e.g. via
-  /// stream sharing when the bound use case combination exceeds the device's
-  /// supported surface combinations, which can change as use cases are bound
-  /// and unbound (like a video recording starting and stopping).
-  final Stream<bool> hasCameraTransformStream;
+  /// CameraX delivers pre-transformed frames, e.g. via stream sharing when the
+  /// bound use case combination exceeds the device's supported surface
+  /// combinations, which can change as use cases are bound and unbound (like a
+  /// video recording starting and stopping).
+  final Stream<PreviewTransformationInfo> transformationInfoStream;
 
   /// The camera preview [Widget] to rotate.
   final Widget child;
@@ -82,40 +83,44 @@ final class RotatedPreviewDelegate extends StatefulWidget {
 }
 
 final class _RotatedPreviewDelegateState extends State<RotatedPreviewDelegate> {
-  late bool _hasCameraTransform;
-  late final StreamSubscription<bool> _hasCameraTransformSubscription;
+  late PreviewTransformationInfo _transformationInfo;
+  late final StreamSubscription<PreviewTransformationInfo> _transformationInfoSubscription;
 
   @override
   void initState() {
     super.initState();
-    _hasCameraTransform = widget.initialHasCameraTransform;
-    _hasCameraTransformSubscription = widget.hasCameraTransformStream.listen((
-      bool hasCameraTransform,
+    _transformationInfo = widget.initialTransformationInfo;
+    _transformationInfoSubscription = widget.transformationInfoStream.listen((
+      PreviewTransformationInfo transformationInfo,
     ) {
       setState(() {
-        _hasCameraTransform = hasCameraTransform;
+        _transformationInfo = transformationInfo;
       });
     });
   }
 
   @override
   void dispose() {
-    unawaited(_hasCameraTransformSubscription.cancel());
+    unawaited(_transformationInfoSubscription.cancel());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // Pre-transformed frames (no camera transform) are already upright with
-    // respect to the display, so sensor orientation compensation must be
-    // skipped and only disagreement between the user interface orientation
-    // and the display rotation needs correcting.
-    if (widget.handlesCropAndRotation || !_hasCameraTransform) {
+    // respect to the display rotation the preview use case targeted when the
+    // frames were prepared, so sensor orientation compensation must be
+    // skipped, that rotation must be undone, and only disagreement between the
+    // user interface orientation and the display rotation needs correcting.
+    if (widget.handlesCropAndRotation || !_transformationInfo.hasCameraTransform) {
       return SurfaceTextureRotatedPreview(
         widget.initialDeviceOrientation,
         widget.initialDefaultDisplayRotation,
         widget.deviceOrientationStream,
         widget.deviceOrientationManager,
+        preRotatedQuarterTurns: _transformationInfo.hasCameraTransform
+            ? 0
+            : getQuarterTurnsFromSurfaceRotationConstant(_transformationInfo.targetRotation),
         child: widget.child,
       );
     }
